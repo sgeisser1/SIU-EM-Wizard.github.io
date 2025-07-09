@@ -1,0 +1,78 @@
+/* Custom SIU-EM-Wizard Styles */
+
+/* 1. Theme & Colors */
+:root {
+    --primary: #c70039; /* SIU Red */
+    --primary-hover: #900c3f;
+    --primary-focus: rgba(199, 0, 57, 0.25);
+    --primary-inverse: #FFF;
+}
+
+/* 2. General Layout */
+body {
+    background-color: #f9f9f9;
+}
+
+header {
+    padding-bottom: 0 !important;
+}
+
+footer {
+    text-align: center;
+    padding: 2rem 0;
+    color: var(--muted-color);
+}
+
+/* 3. Exercise Container Styling */
+.exercise-container {
+    border: 1px solid var(--card-border-color);
+    border-radius: var(--card-border-radius);
+    padding: var(--card-padding);
+    margin-bottom: var(--spacing);
+    background-color: var(--card-background-color);
+    box-shadow: var(--card-box-shadow);
+}
+
+.exercise-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.difficulty-selector select {
+    margin-bottom: 0; /* Remove default margin from Pico */
+}
+
+.exercise-body .question {
+    font-size: 1.2em;
+    padding: 1rem;
+    background-color: #fdfdfd;
+    border-left: 4px solid var(--primary);
+    margin-bottom: 1rem;
+}
+
+.exercise-body .solution {
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.solution h6 {
+    color: #166534;
+    margin-bottom: 0.5rem;
+}
+
+/* Utility Class */
+.hidden {
+    display: none;
+}
+
+/* Katex Font Size */
+.katex {
+    font-size: 1.1em;
+}
