@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potenzen - SIU-EM-Wizard</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/exercise.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="exercise-header">
+        <nav class="exercise-nav">
+            <div class="nav-left">
+                <a href="../../index.html" class="btn btn-secondary">← Zurück zur Übersicht</a>
+            </div>
+            <div class="nav-center">
+                <h1>Potenzen und Wurzeln</h1>
+            </div>
+            <div class="nav-right">
+                <div class="difficulty-selector">
+                    <select id="difficulty" onchange="changeDifficulty()">
+                        <option value="easy">Einfach</option>
+                        <option value="medium" selected>Mittel</option>
+                        <option value="hard">Schwer</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="exercise-container">
+        <!-- Progress Bar -->
+        <div class="exercise-progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+            <span class="progress-text">Aufgabe <span id="currentQuestion">1</span> von <span id="totalQuestions">10</span></span>
+        </div>
+
+        <!-- Theory Section (Collapsible) -->
+        <section class="theory-section" id="theorySection">
+            <div class="theory-header" onclick="toggleTheory()">
+                <h2>📚 Theorie: Potenzen und Wurzeln</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="theory-content" id="theoryContent">
+                <div class="theory-grid">
+                    <div class="theory-card">
+                        <h3>Potenzen</h3>
+                        <p>$$a^n = \underbrace{a \times a \times ... \times a}_{n \text{ mal}}$$</p>
+                        <p><strong>Beispiel:</strong> $2^3 = 2 \times 2 \times 2 = 8$</p>
+                    </div>
+                    <div class="theory-card">
+                        <h3>Potenzgesetze</h3>
+                        <p>$a^m \times a^n = a^{m+n}$</p>
+                        <p>$a^m \div a^n = a^{m-n}$</p>
+                        <p>$(a^m)^n = a^{m \times n}$</p>
+                        <p>$a^0 = 1$ (für $a \neq 0$)</p>
+                    </div>
+                    <div class="theory-card">
+                        <h3>Negative Exponenten</h3>
+                        <p>$$a^{-n} = \frac{1}{a^n}$$</p>
+                        <p><strong>Beispiel:</strong> $2^{-3} = \frac{1}{2^3} = \frac{1}{8}$</p>
+                    </div>
+                    <div class="theory-card">
+                        <h3>Wurzeln</h3>
+                        <p>$$\sqrt[n]{a} = b \Leftrightarrow b^n = a$$</p>
+                        <p><strong>Beispiel:</strong> $\sqrt{16} = 4$ weil $4^2 = 16$</p>
+                    </div>
+                </div>
+                <div class="theory-tips">
+                    <h4>💡 Wichtige Regeln:</h4>
+                    <ul>
+                        <li><strong>Quadratwurzel:</strong> $\sqrt{a} = \sqrt[2]{a}$</li>
+                        <li><strong>Kubikwurzel:</strong> $\sqrt[3]{a}$</li>
+                        <li><strong>Wurzelgesetze:</strong> $\sqrt{a \times b} = \sqrt{a} \times \sqrt{b}$</li>
+                        <li><strong>Vorsicht:</strong> $\sqrt{a + b} \neq \sqrt{a} + \sqrt{b}$</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Exercise Section -->
+        <section class="exercise-section">
+            <div class="exercise-card" id="exerciseCard">
+                <div class="exercise-question">
+                    <h3 id="questionText">Berechnen Sie:</h3>
+                    <div class="math-expression" id="mathExpression">
+                        $$2^3 = ?$$
+                    </div>
+                </div>
+
+                <div class="exercise-input">
+                    <label for="answer">Ihre Antwort:</label>
+                    <input type="number" id="answer" step="any" placeholder="Geben Sie Ihre Antwort ein..." onkeypress="handleEnterKey(event)">
+                    <div class="input-buttons">
+                        <button class="btn btn-primary" onclick="checkAnswer()">Prüfen</button>
+                        <button class="btn btn-secondary" onclick="showHint()" id="hintBtn">💡 Hinweis</button>
+                        <button class="btn btn-secondary" onclick="showSteps()" id="stepsBtn">📖 Schritte</button>
+                    </div>
+                </div>
+
+                <div class="feedback" id="feedback"></div>
+                <div class="hint" id="hint"></div>
+                <div class="solution" id="solution"></div>
+                <div class="steps" id="steps"></div>
+            </div>
+
+            <div class="exercise-controls">
+                <button class="btn btn-secondary" onclick="previousQuestion()" id="prevBtn" disabled>← Vorherige</button>
+                <button class="btn btn-primary" onclick="generateNewQuestion()">Neue Aufgabe</button>
+                <button class="btn btn-secondary" onclick="nextQuestion()" id="nextBtn">Nächste →</button>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Richtige Antworten</h4>
+                    <span class="stat-number" id="correctAnswers">0</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Gesamte Aufgaben</h4>
+                    <span class="stat-number" id="totalAnswers">0</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Erfolgsquote</h4>
+                    <span class="stat-number" id="successRate">0%</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Schwierigkeitsgrad</h4>
+                    <span class="stat-number" id="currentDifficulty">Mittel</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Exercise Logic for Potenzen
+        class PotenzenExercise {
+            constructor() {
+                this.currentQuestion = 1;
+                this.totalQuestions = 10;
+                this.correctAnswers = 0;
+                this.totalAnswers = 0;
+                this.difficulty = 'medium';
+                this.currentExercise = null;
+                this.answered = false;
+                
+                this.generateNewQuestion();
+                this.updateStats();
+            }
+
+            generateNewQuestion() {
+                this.answered = false;
+                this.currentExercise = this.createPowerExercise(this.difficulty);
+                this.displayQuestion();
+                this.clearFeedback();
+                document.getElementById('answer').value = '';
+                document.getElementById('answer').focus();
+            }
+
+            createPowerExercise(difficulty) {
+                const types = ['power', 'root', 'power_rule'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                
+                let question, answer, hint, solution, steps;
+
+                switch (type) {
+                    case 'power':
+                        const powerResult = this.createPowerProblem(difficulty);
+                        question = powerResult.question;
+                        answer = powerResult.answer;
+                        hint = powerResult.hint;
+                        solution = powerResult.solution;
+                        steps = powerResult.steps;
+                        break;
+                    case 'root':
+                        const rootResult = this.createRootProblem(difficulty);
+                        question = rootResult.question;
+                        answer = rootResult.answer;
+                        hint = rootResult.hint;
+                        solution = rootResult.solution;
+                        steps = rootResult.steps;
+                        break;
+                    case 'power_rule':
+                        const ruleResult = this.createPowerRuleProblem(difficulty);
+                        question = ruleResult.question;
+                        answer = ruleResult.answer;
+                        hint = ruleResult.hint;
+                        solution = ruleResult.solution;
+                        steps = ruleResult.steps;
+                        break;
+                }
+
+                return { question, answer, hint, solution, steps };
+            }
+
+            createPowerProblem(difficulty) {
+                let base, exponent, answer;
+                
+                switch (difficulty) {
+                    case 'easy':
+                        base = Math.floor(Math.random() * 5) + 2; // 2-6
+                        exponent = Math.floor(Math.random() * 3) + 2; // 2-4
+                        break;
+                    case 'medium':
+                        base = Math.floor(Math.random() * 8) + 2; // 2-9
+                        exponent = Math.floor(Math.random() * 4) + 2; // 2-5
+                        break;
+                    case 'hard':
+                        base = Math.floor(Math.random() * 10) + 2; // 2-11
+                        exponent = Math.floor(Math.random() * 5) + 2; // 2-6
+                        break;
+                }
+
+                answer = Math.pow(base, exponent);
+                const question = `${base}^{${exponent}}`;
+                const hint = `Multipliziere ${base} insgesamt ${exponent} mal mit sich selbst`;
+                const solution = `${base}^{${exponent}} = ${answer}`;
+                
+                const steps = [`${base}^{${exponent}} = ${Array(exponent).fill(base).join(' \\times ')} = ${answer}`];
+
+                return { question, answer, hint, solution, steps };
+            }
+
+            createRootProblem(difficulty) {
+                let answer, radicand, rootIndex;
+                
+                switch (difficulty) {
+                    case 'easy':
+                        rootIndex = 2; // Quadratwurzel
+                        answer = Math.floor(Math.random() * 8) + 2; // 2-9
+                        break;
+                    case 'medium':
+                        rootIndex = Math.random() < 0.7 ? 2 : 3; // Meist Quadrat-, manchmal Kubikwurzel
+                        answer = Math.floor(Math.random() * 10) + 2; // 2-11
+                        break;
+                    case 'hard':
+                        rootIndex = [2, 3, 4][Math.floor(Math.random() * 3)];
+                        answer = Math.floor(Math.random() * 12) + 2; // 2-13
+                        break;
+                }
+
+                radicand = Math.pow(answer, rootIndex);
+                const question = rootIndex === 2 ? `\\sqrt{${radicand}}` : `\\sqrt[${rootIndex}]{${radicand}}`;
+                const hint = `Suche eine Zahl, die hoch ${rootIndex} gleich ${radicand} ergibt`;
+                const solution = rootIndex === 2 ? `\\sqrt{${radicand}} = ${answer}` : `\\sqrt[${rootIndex}]{${radicand}} = ${answer}`;
+                
+                const steps = [`\\text{Gesucht: } x \\text{ mit } x^{${rootIndex}} = ${radicand}`, `\\text{Antwort: } ${answer}^{${rootIndex}} = ${radicand}`];
+
+                return { question, answer, hint, solution, steps };
+            }
+
+            createPowerRuleProblem(difficulty) {
+                const rules = ['multiply', 'divide', 'power_of_power'];
+                const rule = rules[Math.floor(Math.random() * rules.length)];
+                
+                let base, exp1, exp2, answer, question, hint, solution, steps;
+
+                switch (difficulty) {
+                    case 'easy':
+                        base = Math.floor(Math.random() * 4) + 2; // 2-5
+                        exp1 = Math.floor(Math.random() * 3) + 1; // 1-3
+                        exp2 = Math.floor(Math.random() * 3) + 1; // 1-3
+                        break;
+                    case 'medium':
+                        base = Math.floor(Math.random() * 6) + 2; // 2-7
+                        exp1 = Math.floor(Math.random() * 4) + 1; // 1-4
+                        exp2 = Math.floor(Math.random() * 4) + 1; // 1-4
+                        break;
+                    case 'hard':
+                        base = Math.floor(Math.random() * 8) + 2; // 2-9
+                        exp1 = Math.floor(Math.random() * 5) + 1; // 1-5
+                        exp2 = Math.floor(Math.random() * 5) + 1; // 1-5
+                        break;
+                }
+
+                switch (rule) {
+                    case 'multiply':
+                        answer = Math.pow(base, exp1 + exp2);
+                        question = `${base}^{${exp1}} \\times ${base}^{${exp2}}`;
+                        hint = `Bei Multiplikation: Exponenten addieren`;
+                        solution = `${base}^{${exp1}} \\times ${base}^{${exp2}} = ${base}^{${exp1}+${exp2}} = ${base}^{${exp1 + exp2}} = ${answer}`;
+                        steps = [
+                            `${base}^{${exp1}} \\times ${base}^{${exp2}}`,
+                            `= ${base}^{${exp1}+${exp2}}`,
+                            `= ${base}^{${exp1 + exp2}}`,
+                            `= ${answer}`
+                        ];
+                        break;
+                    case 'divide':
+                        if (exp1 <= exp2) [exp1, exp2] = [exp2, exp1]; // Ensure exp1 > exp2
+                        answer = Math.pow(base, exp1 - exp2);
+                        question = `${base}^{${exp1}} \\div ${base}^{${exp2}}`;
+                        hint = `Bei Division: Exponenten subtrahieren`;
+                        solution = `${base}^{${exp1}} \\div ${base}^{${exp2}} = ${base}^{${exp1}-${exp2}} = ${base}^{${exp1 - exp2}} = ${answer}`;
+                        steps = [
+                            `${base}^{${exp1}} \\div ${base}^{${exp2}}`,
+                            `= ${base}^{${exp1}-${exp2}}`,
+                            `= ${base}^{${exp1 - exp2}}`,
+                            `= ${answer}`
+                        ];
+                        break;
+                    case 'power_of_power':
+                        answer = Math.pow(base, exp1 * exp2);
+                        question = `(${base}^{${exp1}})^{${exp2}}`;
+                        hint = `Bei Potenz einer Potenz: Exponenten multiplizieren`;
+                        solution = `(${base}^{${exp1}})^{${exp2}} = ${base}^{${exp1} \\times ${exp2}} = ${base}^{${exp1 * exp2}} = ${answer}`;
+                        steps = [
+                            `(${base}^{${exp1}})^{${exp2}}`,
+                            `= ${base}^{${exp1} \\times ${exp2}}`,
+                            `= ${base}^{${exp1 * exp2}}`,
+                            `= ${answer}`
+                        ];
+                        break;
+                }
+
+                return { question, answer, hint, solution, steps };
+            }
+
+            displayQuestion() {
+                document.getElementById('mathExpression').innerHTML = `$$${this.currentExercise.question} = ?$$`;
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+
+            checkAnswer() {
+                if (this.answered) return;
+
+                const userAnswer = parseFloat(document.getElementById('answer').value);
+                const feedback = document.getElementById('feedback');
+                
+                if (isNaN(userAnswer)) {
+                    feedback.innerHTML = '<div class="feedback-error">⚠️ Bitte geben Sie eine gültige Zahl ein.</div>';
+                    return;
+                }
+
+                this.answered = true;
+                this.totalAnswers++;
+
+                if (Math.abs(userAnswer - this.currentExercise.answer) < 0.001) {
+                    this.correctAnswers++;
+                    feedback.innerHTML = `
+                        <div class="feedback-success">
+                            ✅ Richtig! Die Antwort ist ${this.currentExercise.answer}.
+                        </div>
+                    `;
+                    
+                    // Auto-advance after correct answer
+                    setTimeout(() => {
+                        this.nextQuestion();
+                    }, 2000);
+                } else {
+                    feedback.innerHTML = `
+                        <div class="feedback-error">
+                            ❌ Falsch. Ihre Antwort: ${userAnswer}, Richtige Antwort: ${this.currentExercise.answer}
+                        </div>
+                    `;
+                    this.showSolution();
+                }
+
+                this.updateStats();
+                this.updateProgress();
+            }
+
+            showHint() {
+                const hint = document.getElementById('hint');
+                hint.innerHTML = `<div class="hint-content">💡 ${this.currentExercise.hint}</div>`;
+            }
+
+            showSolution() {
+                const solution = document.getElementById('solution');
+                solution.innerHTML = `
+                    <div class="solution-content">
+                        <h4>📖 Lösung:</h4>
+                        <p>$$${this.currentExercise.solution}$$</p>
+                    </div>
+                `;
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+
+            showSteps() {
+                const stepsDiv = document.getElementById('steps');
+                if (this.currentExercise.steps) {
+                    let stepsHtml = '<div class="solution-steps"><h4>📝 Lösungsschritte:</h4>';
+                    this.currentExercise.steps.forEach((step, index) => {
+                        stepsHtml += `
+                            <div class="solution-step">
+                                <div class="step-number">${index + 1}</div>
+                                <div class="step-content">$$${step}$$</div>
+                            </div>
+                        `;
+                    });
+                    stepsHtml += '</div>';
+                    stepsDiv.innerHTML = stepsHtml;
+                    
+                    if (window.MathJax) {
+                        MathJax.typesetPromise();
+                    }
+                }
+            }
+
+            nextQuestion() {
+                if (this.currentQuestion < this.totalQuestions) {
+                    this.currentQuestion++;
+                } else {
+                    this.currentQuestion = 1;
+                }
+                this.generateNewQuestion();
+                this.updateProgress();
+            }
+
+            previousQuestion() {
+                if (this.currentQuestion > 1) {
+                    this.currentQuestion--;
+                    this.generateNewQuestion();
+                    this.updateProgress();
+                }
+            }
+
+            updateProgress() {
+                const progress = (this.currentQuestion / this.totalQuestions) * 100;
+                document.getElementById('progressBar').style.width = `${progress}%`;
+                document.getElementById('currentQuestion').textContent = this.currentQuestion;
+                document.getElementById('totalQuestions').textContent = this.totalQuestions;
+                
+                // Update button states
+                document.getElementById('prevBtn').disabled = this.currentQuestion === 1;
+            }
+
+            updateStats() {
+                document.getElementById('correctAnswers').textContent = this.correctAnswers;
+                document.getElementById('totalAnswers').textContent = this.totalAnswers;
+                const successRate = this.totalAnswers > 0 ? Math.round((this.correctAnswers / this.totalAnswers) * 100) : 0;
+                document.getElementById('successRate').textContent = `${successRate}%`;
+                document.getElementById('currentDifficulty').textContent = this.getDifficultyText();
+            }
+
+            getDifficultyText() {
+                const difficultyMap = {
+                    'easy': 'Einfach',
+                    'medium': 'Mittel',
+                    'hard': 'Schwer'
+                };
+                return difficultyMap[this.difficulty] || 'Mittel';
+            }
+
+            changeDifficulty(newDifficulty) {
+                this.difficulty = newDifficulty;
+                this.generateNewQuestion();
+                this.updateStats();
+            }
+
+            clearFeedback() {
+                document.getElementById('feedback').innerHTML = '';
+                document.getElementById('hint').innerHTML = '';
+                document.getElementById('solution').innerHTML = '';
+                document.getElementById('steps').innerHTML = '';
+            }
+        }
+
+        // Global functions
+        let exercise;
+
+        function initializeExercise() {
+            exercise = new PotenzenExercise();
+        }
+
+        function checkAnswer() {
+            if (exercise) exercise.checkAnswer();
+        }
+
+        function showHint() {
+            if (exercise) exercise.showHint();
+        }
+
+        function showSteps() {
+            if (exercise) exercise.showSteps();
+        }
+
+        function generateNewQuestion() {
+            if (exercise) exercise.generateNewQuestion();
+        }
+
+        function nextQuestion() {
+            if (exercise) exercise.nextQuestion();
+        }
+
+        function previousQuestion() {
+            if (exercise) exercise.previousQuestion();
+        }
+
+        function changeDifficulty() {
+            const difficulty = document.getElementById('difficulty').value;
+            if (exercise) exercise.changeDifficulty(difficulty);
+        }
+
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        }
+
+        function toggleTheory() {
+            const content = document.getElementById('theoryContent');
+            const icon = document.querySelector('.toggle-icon');
+            
+            if (content.style.display === 'none' || !content.style.display) {
+                content.style.display = 'block';
+                icon.textContent = '▲';
+            } else {
+                content.style.display = 'none';
+                icon.textContent = '▼';
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeExercise();
+            
+            // Track progress
+            if (window.parent && window.parent.emWizard) {
+                window.parent.emWizard.progressTracker.updateLastTopic(window.location.href);
+            }
+        });
+
+        // Track exercise completion
+        window.addEventListener('beforeunload', function() {
+            if (exercise && exercise.correctAnswers > 0) {
+                if (window.parent && window.parent.emWizard) {
+                    window.parent.emWizard.progressTracker.markExerciseCompleted('grundlagen', 'potenzen');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

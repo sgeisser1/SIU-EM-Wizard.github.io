@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leistung und Arbeit - SIU-EM-Wizard</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/exercise.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="exercise-header">
+        <nav class="exercise-nav">
+            <div class="nav-left">
+                <a href="../../index.html" class="btn btn-secondary">← Zurück zur Übersicht</a>
+            </div>
+            <div class="nav-center">
+                <h1>Leistung und Arbeit</h1>
+            </div>
+            <div class="nav-right">
+                <div class="difficulty-selector">
+                    <select id="difficulty" onchange="changeDifficulty()">
+                        <option value="easy">Einfach</option>
+                        <option value="medium" selected>Mittel</option>
+                        <option value="hard">Schwer</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="exercise-container">
+        <!-- Progress Bar -->
+        <div class="exercise-progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+            <span class="progress-text">Aufgabe <span id="currentQuestion">1</span> von <span id="totalQuestions">10</span></span>
+        </div>
+
+        <!-- Theory Section (Collapsible) -->
+        <section class="theory-section" id="theorySection">
+            <div class="theory-header" onclick="toggleTheory()">
+                <h2>📚 Theorie: Leistung, Arbeit und Wirkungsgrad</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="theory-content" id="theoryContent">
+                <div class="theory-grid">
+                    <div class="theory-card">
+                        <h3>Elektrische Leistung</h3>
+                        <p>$$P = U \times I$$</p>
+                        <p>$$P = \frac{U^2}{R} = I^2 \times R$$</p>
+                        <p><strong>Einheit:</strong> Watt [W]</p>
+                    </div>
+                    <div class="theory-card">
+                        <h3>Mechanische Leistung</h3>
+                        <p>$$P = \frac{W}{t} = F \times v$$</p>
+                        <p>$$P = M \times \omega$$</p>
+                        <p><strong>Einheit:</strong> Watt [W]</p>
+                    </div>
+                    <div class="theory-card">
+                        <h3>Arbeit/Energie</h3>
+                        <p>$$W = P \times t$$</p>
+                        <p><strong>Mechanisch:</strong> Joule [J]</p>
+                        <p><strong>Elektrisch:</strong> Wattstunde [Wh]</p>
+                        <p>1 kWh = 3.6 MJ</p>
+                    </div>
+                    <div class="theory-card">
+                        <h3>Wirkungsgrad</h3>
+                        <p>$$\eta = \frac{P_{ab}}{P_{auf}}$$</p>
+                        <p>$$\eta_{gesamt} = \eta_1 \times \eta_2 \times ... \times \eta_n$$</p>
+                        <p>Angabe: 0...1 oder 0...100%</p>
+                    </div>
+                </div>
+                <div class="theory-tips">
+                    <h4>💡 Wichtige Formeln:</h4>
+                    <ul>
+                        <li><strong>Mechanische Arbeit:</strong> $W = F \times s$</li>
+                        <li><strong>Rotationsleistung:</strong> $P = M \times 2\pi \times n$</li>
+                        <li><strong>Verlustleistung:</strong> $P_{Verlust} = P_{auf} - P_{ab}$</li>
+                        <li><strong>Umrechnung:</strong> $\omega = 2\pi \times n$ [rad/s]</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Exercise Section -->
+        <section class="exercise-section">
+            <div class="exercise-card" id="exerciseCard">
+                <div class="exercise-question">
+                    <h3 id="questionText">Berechnen Sie den gesuchten Wert:</h3>
+                    <div class="math-expression" id="mathExpression">
+                        <p>Ein Elektromotor nimmt eine Leistung von 1200 W auf und hat einen Wirkungsgrad von 85%. Wie groß ist die abgegebene mechanische Leistung?</p>
+                    </div>
+                </div>
+
+                <div class="exercise-input">
+                    <label for="answer" id="answerLabel">Mechanische Leistung P_ab = </label>
+                    <input type="number" id="answer" step="any" placeholder="Antwort eingeben..." onkeypress="handleEnterKey(event)">
+                    <span id="unitLabel" class="unit-label">W</span>
+                    <div class="input-buttons">
+                        <button class="btn btn-primary" onclick="checkAnswer()">Prüfen</button>
+                        <button class="btn btn-secondary" onclick="showHint()" id="hintBtn">💡 Hinweis</button>
+                        <button class="btn btn-secondary" onclick="showSteps()" id="stepsBtn">📖 Schritte</button>
+                    </div>
+                </div>
+
+                <div class="feedback" id="feedback"></div>
+                <div class="hint" id="hint"></div>
+                <div class="solution" id="solution"></div>
+                <div class="steps" id="steps"></div>
+            </div>
+
+            <div class="exercise-controls">
+                <button class="btn btn-secondary" onclick="previousQuestion()" id="prevBtn" disabled>← Vorherige</button>
+                <button class="btn btn-primary" onclick="generateNewQuestion()">Neue Aufgabe</button>
+                <button class="btn btn-secondary" onclick="nextQuestion()" id="nextBtn">Nächste →</button>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Richtige Antworten</h4>
+                    <span class="stat-number" id="correctAnswers">0</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Gesamte Aufgaben</h4>
+                    <span class="stat-number" id="totalAnswers">0</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Erfolgsquote</h4>
+                    <span class="stat-number" id="successRate">0%</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Schwierigkeitsgrad</h4>
+                    <span class="stat-number" id="currentDifficulty">Mittel</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Exercise Logic for Leistung und Arbeit
+        class LeistungArbeitExercise {
+            constructor() {
+                this.currentQuestion = 1;
+                this.totalQuestions = 10;
+                this.correctAnswers = 0;
+                this.totalAnswers = 0;
+                this.difficulty = 'medium';
+                this.currentExercise = null;
+                this.answered = false;
+                
+                this.generateNewQuestion();
+                this.updateStats();
+            }
+
+            generateNewQuestion() {
+                this.answered = false;
+                this.currentExercise = this.createPowerWorkExercise(this.difficulty);
+                this.displayQuestion();
+                this.clearFeedback();
+                this.updateInputLabel();
+                document.getElementById('answer').value = '';
+                document.getElementById('answer').focus();
+            }
+
+            createPowerWorkExercise(difficulty) {
+                const types = ['electrical_power', 'mechanical_power', 'work_energy', 'efficiency', 'combined'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                
+                let question, answer, hint, solution, steps, unit, seekType;
+
+                switch (type) {
+                    case 'electrical_power':
+                        return this.createElectricalPowerProblem(difficulty);
+                    case 'mechanical_power':
+                        return this.createMechanicalPowerProblem(difficulty);
+                    case 'work_energy':
+                        return this.createWorkEnergyProblem(difficulty);
+                    case 'efficiency':
+                        return this.createEfficiencyProblem(difficulty);
+                    case 'combined':
+                        return this.createCombinedProblem(difficulty);
+                }
+            }
+
+            createElectricalPowerProblem(difficulty) {
+                const subTypes = ['ohm_power', 'ui_power'];
+                const subType = subTypes[Math.floor(Math.random() * subTypes.length)];
+                
+                let U, I, R, P, question, answer, hint, solution, steps, unit, seekType;
+
+                switch (difficulty) {
+                    case 'easy':
+                        U = [12, 24, 48, 110, 230][Math.floor(Math.random() * 5)];
+                        I = [0.5, 1, 2, 5, 10][Math.floor(Math.random() * 5)];
+                        R = [10, 20, 50, 100, 220][Math.floor(Math.random() * 5)];
+                        break;
+                    case 'medium':
+                        U = Math.floor(Math.random() * 400) + 50; // 50-450V
+                        I = (Math.floor(Math.random() * 50) + 5) / 10; // 0.5-5.5A
+                        R = Math.floor(Math.random() * 500) + 10; // 10-510Ω
+                        break;
+                    case 'hard':
+                        U = Math.floor(Math.random() * 1000) + 100; // 100-1100V
+                        I = (Math.floor(Math.random() * 100) + 1) / 100; // 0.01-1.0A
+                        R = Math.floor(Math.random() * 2000) + 50; // 50-2050Ω
+                        break;
+                }
+
+                if (subType === 'ui_power') {
+                    const seeks = ['power', 'voltage', 'current'];
+                    seekType = seeks[Math.floor(Math.random() * seeks.length)];
+                    
+                    switch (seekType) {
+                        case 'power':
+                            P = U * I;
+                            answer = P;
+                            unit = 'W';
+                            question = `Eine elektrische Last wird mit U = ${U} V und I = ${I} A betrieben. Berechnen Sie die Leistung.`;
+                            hint = `Verwende P = U × I`;
+                            solution = `P = U \\times I = ${U} \\times ${I} = ${P} W`;
+                            steps = [
+                                `Gegeben: U = ${U} V, I = ${I} A`,
+                                `Gesucht: P`,
+                                `Formel: P = U \\times I`,
+                                `P = ${U} \\times ${I} = ${P} W`
+                            ];
+                            break;
+                        case 'voltage':
+                            P = U * I;
+                            answer = U;
+                            unit = 'V';
+                            question = `Ein Verbraucher nimmt I = ${I} A auf und hat eine Leistung von P = ${P} W. Wie groß ist die Spannung?`;
+                            hint = `Stelle P = U × I nach U um: U = P/I`;
+                            solution = `U = \\frac{P}{I} = \\frac{${P}}{${I}} = ${U} V`;
+                            steps = [
+                                `Gegeben: I = ${I} A, P = ${P} W`,
+                                `Gesucht: U`,
+                                `Umstellen: U = P / I`,
+                                `U = ${P} / ${I} = ${U} V`
+                            ];
+                            break;
+                        case 'current':
+                            P = U * I;
+                            answer = I;
+                            unit = 'A';
+                            question = `An einer Spannung von U = ${U} V wird eine Leistung von P = ${P} W umgesetzt. Wie groß ist der Strom?`;
+                            hint = `Stelle P = U × I nach I um: I = P/U`;
+                            solution = `I = \\frac{P}{U} = \\frac{${P}}{${U}} = ${I} A`;
+                            steps = [
+                                `Gegeben: U = ${U} V, P = ${P} W`,
+                                `Gesucht: I`,
+                                `Umstellen: I = P / U`,
+                                `I = ${P} / ${U} = ${I} A`
+                            ];
+                            break;
+                    }
+                } else { // ohm_power
+                    const seeks = ['power_from_u', 'power_from_i', 'resistance'];
+                    seekType = seeks[Math.floor(Math.random() * seeks.length)];
+                    
+                    switch (seekType) {
+                        case 'power_from_u':
+                            P = Math.round(U * U / R * 100) / 100;
+                            answer = P;
+                            unit = 'W';
+                            question = `Ein Widerstand von R = ${R} Ω liegt an einer Spannung von U = ${U} V. Berechnen Sie die Leistung.`;
+                            hint = `Verwende P = U²/R`;
+                            solution = `P = \\frac{U^2}{R} = \\frac{${U}^2}{${R}} = \\frac{${U*U}}{${R}} = ${P} W`;
+                            steps = [
+                                `Gegeben: U = ${U} V, R = ${R} Ω`,
+                                `Gesucht: P`,
+                                `Formel: P = U² / R`,
+                                `P = ${U}² / ${R} = ${U*U} / ${R} = ${P} W`
+                            ];
+                            break;
+                        case 'power_from_i':
+                            P = Math.round(I * I * R * 100) / 100;
+                            answer = P;
+                            unit = 'W';
+                            question = `Durch einen Widerstand von R = ${R} Ω fließt ein Strom von I = ${I} A. Berechnen Sie die Leistung.`;
+                            hint = `Verwende P = I² × R`;
+                            solution = `P = I^2 \\times R = ${I}^2 \\times ${R} = ${I*I} \\times ${R} = ${P} W`;
+                            steps = [
+                                `Gegeben: I = ${I} A, R = ${R} Ω`,
+                                `Gesucht: P`,
+                                `Formel: P = I² × R`,
+                                `P = ${I}² × ${R} = ${I*I} × ${R} = ${P} W`
+                            ];
+                            break;
+                        case 'resistance':
+                            P = Math.round(U * U / R * 100) / 100;
+                            answer = R;
+                            unit = 'Ω';
+                            question = `An einer Spannung von U = ${U} V wird eine Leistung von P = ${P} W umgesetzt. Wie groß ist der Widerstand?`;
+                            hint = `Stelle P = U²/R nach R um: R = U²/P`;
+                            solution = `R = \\frac{U^2}{P} = \\frac{${U}^2}{${P}} = \\frac{${U*U}}{${P}} = ${R} Ω`;
+                            steps = [
+                                `Gegeben: U = ${U} V, P = ${P} W`,
+                                `Gesucht: R`,
+                                `Umstellen: R = U² / P`,
+                                `R = ${U}² / ${P} = ${U*U} / ${P} = ${R} Ω`
+                            ];
+                            break;
+                    }
+                }
+
+                return { question, answer, hint, solution, steps, unit, seekType };
+            }
+
+            createMechanicalPowerProblem(difficulty) {
+                const subTypes = ['linear', 'rotational'];
+                const subType = subTypes[Math.floor(Math.random() * subTypes.length)];
+                
+                let F, v, s, t, M, n, omega, P, question, answer, hint, solution, steps, unit, seekType;
+
+                switch (difficulty) {
+                    case 'easy':
+                        F = [100, 200, 500, 1000][Math.floor(Math.random() * 4)]; // N
+                        v = [2, 5, 10, 20][Math.floor(Math.random() * 4)]; // m/s
+                        M = [10, 20, 50, 100][Math.floor(Math.random() * 4)]; // Nm
+                        n = [10, 20, 30, 50][Math.floor(Math.random() * 4)]; // 1/s
+                        break;
+                    case 'medium':
+                        F = Math.floor(Math.random() * 2000) + 100; // 100-2100N
+                        v = (Math.floor(Math.random() * 50) + 5) / 10; // 0.5-5.5 m/s
+                        M = Math.floor(Math.random() * 200) + 10; // 10-210 Nm
+                        n = (Math.floor(Math.random() * 100) + 5) / 10; // 0.5-10.5 1/s
+                        break;
+                    case 'hard':
+                        F = Math.floor(Math.random() * 5000) + 500; // 500-5500N
+                        v = (Math.floor(Math.random() * 100) + 1) / 10; // 0.1-10.0 m/s
+                        M = Math.floor(Math.random() * 500) + 50; // 50-550 Nm
+                        n = (Math.floor(Math.random() * 200) + 10) / 100; // 0.1-2.1 1/s
+                        break;
+                }
+
+                if (subType === 'linear') {
+                    const seeks = ['power_fv', 'force', 'velocity', 'work'];
+                    seekType = seeks[Math.floor(Math.random() * seeks.length)];
+                    
+                    switch (seekType) {
+                        case 'power_fv':
+                            P = F * v;
+                            answer = P;
+                            unit = 'W';
+                            question = `Eine Kraft von F = ${F} N bewegt sich mit einer Geschwindigkeit von v = ${v} m/s. Berechnen Sie die mechanische Leistung.`;
+                            hint = `Verwende P = F × v`;
+                            solution = `P = F \\times v = ${F} \\times ${v} = ${P} W`;
+                            steps = [
+                                `Gegeben: F = ${F} N, v = ${v} m/s`,
+                                `Gesucht: P`,
+                                `Formel: P = F × v`,
+                                `P = ${F} × ${v} = ${P} W`
+                            ];
+                            break;
+                        case 'force':
+                            P = F * v;
+                            answer = F;
+                            unit = 'N';
+                            question = `Eine mechanische Leistung von P = ${P} W wird bei einer Geschwindigkeit von v = ${v} m/s erbracht. Wie groß ist die Kraft?`;
+                            hint = `Stelle P = F × v nach F um: F = P/v`;
+                            solution = `F = \\frac{P}{v} = \\frac{${P}}{${v}} = ${F} N`;
+                            steps = [
+                                `Gegeben: P = ${P} W, v = ${v} m/s`,
+                                `Gesucht: F`,
+                                `Umstellen: F = P / v`,
+                                `F = ${P} / ${v} = ${F} N`
+                            ];
+                            break;
+                        case 'velocity':
+                            P = F * v;
+                            answer = v;
+                            unit = 'm/s';
+                            question = `Eine Kraft von F = ${F} N erbringt eine Leistung von P = ${P} W. Mit welcher Geschwindigkeit bewegt sie sich?`;
+                            hint = `Stelle P = F × v nach v um: v = P/F`;
+                            solution = `v = \\frac{P}{F} = \\frac{${P}}{${F}} = ${v} m/s`;
+                            steps = [
+                                `Gegeben: F = ${F} N, P = ${P} W`,
+                                `Gesucht: v`,
+                                `Umstellen: v = P / F`,
+                                `v = ${P} / ${F} = ${v} m/s`
+                            ];
+                            break;
+                        case 'work':
+                            s = Math.floor(Math.random() * 100) + 10; // 10-110m
+                            t = Math.floor(Math.random() * 10) + 1; // 1-11s
+                            const W = F * s;
+                            answer = W;
+                            unit = 'J';
+                            question = `Eine Kraft von F = ${F} N wirkt über eine Strecke von s = ${s} m. Wie groß ist die verrichtete Arbeit?`;
+                            hint = `Verwende W = F × s`;
+                            solution = `W = F \\times s = ${F} \\times ${s} = ${W} J`;
+                            steps = [
+                                `Gegeben: F = ${F} N, s = ${s} m`,
+                                `Gesucht: W`,
+                                `Formel: W = F × s`,
+                                `W = ${F} × ${s} = ${W} J`
+                            ];
+                            break;
+                    }
+                } else { // rotational
+                    const seeks = ['power_rotation', 'torque', 'speed'];
+                    seekType = seeks[Math.floor(Math.random() * seeks.length)];
+                    omega = Math.round(2 * Math.PI * n * 100) / 100;
+                    
+                    switch (seekType) {
+                        case 'power_rotation':
+                            P = Math.round(M * 2 * Math.PI * n * 100) / 100;
+                            answer = P;
+                            unit = 'W';
+                            question = `Ein Motor erzeugt ein Drehmoment von M = ${M} Nm bei einer Drehzahl von n = ${n} 1/s. Berechnen Sie die mechanische Leistung.`;
+                            hint = `Verwende P = M × 2π × n`;
+                            solution = `P = M \\times 2\\pi \\times n = ${M} \\times 2\\pi \\times ${n} = ${P} W`;
+                            steps = [
+                                `Gegeben: M = ${M} Nm, n = ${n} 1/s`,
+                                `Gesucht: P`,
+                                `Formel: P = M × 2π × n`,
+                                `P = ${M} × 2π × ${n} = ${P} W`
+                            ];
+                            break;
+                        case 'torque':
+                            P = Math.round(M * 2 * Math.PI * n * 100) / 100;
+                            answer = M;
+                            unit = 'Nm';
+                            question = `Ein Motor mit einer Drehzahl von n = ${n} 1/s erbringt eine Leistung von P = ${P} W. Wie groß ist das Drehmoment?`;
+                            hint = `Stelle P = M × 2π × n nach M um: M = P/(2π × n)`;
+                            solution = `M = \\frac{P}{2\\pi \\times n} = \\frac{${P}}{2\\pi \\times ${n}} = ${M} Nm`;
+                            steps = [
+                                `Gegeben: n = ${n} 1/s, P = ${P} W`,
+                                `Gesucht: M`,
+                                `Umstellen: M = P / (2π × n)`,
+                                `M = ${P} / (2π × ${n}) = ${M} Nm`
+                            ];
+                            break;
+                        case 'speed':
+                            P = Math.round(M * 2 * Math.PI * n * 100) / 100;
+                            answer = n;
+                            unit = '1/s';
+                            question = `Ein Motor mit einem Drehmoment von M = ${M} Nm erbringt eine Leistung von P = ${P} W. Wie groß ist die Drehzahl?`;
+                            hint = `Stelle P = M × 2π × n nach n um: n = P/(M × 2π)`;
+                            solution = `n = \\frac{P}{M \\times 2\\pi} = \\frac{${P}}{${M} \\times 2\\pi} = ${n} 1/s`;
+                            steps = [
+                                `Gegeben: M = ${M} Nm, P = ${P} W`,
+                                `Gesucht: n`,
+                                `Umstellen: n = P / (M × 2π)`,
+                                `n = ${P} / (${M} × 2π) = ${n} 1/s`
+                            ];
+                            break;
+                    }
+                }
+
+                return { question, answer, hint, solution, steps, unit, seekType };
+            }
+
+            createWorkEnergyProblem(difficulty) {
+                let P, t, W, question, answer, hint, solution, steps, unit, seekType;
+
+                switch (difficulty) {
+                    case 'easy':
+                        P = [100, 500, 1000, 2000][Math.floor(Math.random() * 4)]; // W
+                        t = [1, 2, 5, 10][Math.floor(Math.random() * 4)]; // h
+                        break;
+                    case 'medium':
+                        P = Math.floor(Math.random() * 5000) + 100; // 100-5100W
+                        t = (Math.floor(Math.random() * 50) + 5) / 10; // 0.5-5.5h
+                        break;
+                    case 'hard':
+                        P = Math.floor(Math.random() * 10000) + 500; // 500-10500W
+                        t = (Math.floor(Math.random() * 100) + 1) / 100; // 0.01-1.0h
+                        break;
+                }
+
+                const seeks = ['energy_kwh', 'energy_j', 'power_from_energy', 'time_from_energy'];
+                seekType = seeks[Math.floor(Math.random() * seeks.length)];
+
+                switch (seekType) {
+                    case 'energy_kwh':
+                        W = P * t / 1000; // kWh
+                        answer = Math.round(W * 1000) / 1000;
+                        unit = 'kWh';
+                        question = `Ein Gerät mit einer Leistung von P = ${P} W läuft für t = ${t} h. Wie viel Energie wird verbraucht?`;
+                        hint = `Verwende W = P × t und rechne in kWh um`;
+                        solution = `W = P \\times t = ${P} W \\times ${t} h = ${P * t} Wh = ${answer} kWh`;
+                        steps = [
+                            `Gegeben: P = ${P} W, t = ${t} h`,
+                            `Gesucht: W in kWh`,
+                            `W = P × t = ${P} × ${t} = ${P * t} Wh`,
+                            `W = ${P * t} / 1000 = ${answer} kWh`
+                        ];
+                        break;
+                    case 'energy_j':
+                        const t_s = t * 3600; // Convert to seconds
+                        W = P * t_s; // Joules
+                        answer = W;
+                        unit = 'J';
+                        question = `Ein Motor mit einer Leistung von P = ${P} W läuft für t = ${t} h. Wie viel Energie wird in Joule umgesetzt?`;
+                        hint = `Verwende W = P × t, aber rechne die Zeit in Sekunden um`;
+                        solution = `W = P \\times t = ${P} W \\times ${t_s} s = ${W} J`;
+                        steps = [
+                            `Gegeben: P = ${P} W, t = ${t} h`,
+                            `Gesucht: W in J`,
+                            `Umrechnung: t = ${t} h = ${t_s} s`,
+                            `W = P × t = ${P} × ${t_s} = ${W} J`
+                        ];
+                        break;
+                    case 'power_from_energy':
+                        W = P * t / 1000; // kWh
+                        answer = P;
+                        unit = 'W';
+                        question = `Ein Gerät verbraucht in t = ${t} h eine Energie von W = ${W} kWh. Wie groß ist die Leistung?`;
+                        hint = `Stelle W = P × t nach P um: P = W/t`;
+                        solution = `P = \\frac{W}{t} = \\frac{${W} kWh}{${t} h} = ${W/t} kW = ${P} W`;
+                        steps = [
+                            `Gegeben: W = ${W} kWh, t = ${t} h`,
+                            `Gesucht: P`,
+                            `Umstellen: P = W / t`,
+                            `P = ${W} / ${t} = ${W/t} kW = ${P} W`
+                        ];
+                        break;
+                    case 'time_from_energy':
+                        W = P * t / 1000; // kWh
+                        answer = t;
+                        unit = 'h';
+                        question = `Ein Gerät mit einer Leistung von P = ${P} W soll eine Energie von W = ${W} kWh umsetzen. Wie lange muss es laufen?`;
+                        hint = `Stelle W = P × t nach t um: t = W/P`;
+                        solution = `t = \\frac{W}{P} = \\frac{${W} kWh}{${P/1000} kW} = ${t} h`;
+                        steps = [
+                            `Gegeben: P = ${P} W = ${P/1000} kW, W = ${W} kWh`,
+                            `Gesucht: t`,
+                            `Umstellen: t = W / P`,
+                            `t = ${W} / ${P/1000} = ${t} h`
+                        ];
+                        break;
+                }
+
+                return { question, answer, hint, solution, steps, unit, seekType };
+            }
+
+            createEfficiencyProblem(difficulty) {
+                let P_auf, P_ab, eta, eta1, eta2, eta3, question, answer, hint, solution, steps, unit, seekType;
+
+                switch (difficulty) {
+                    case 'easy':
+                        P_auf = [100, 500, 1000, 2000][Math.floor(Math.random() * 4)];
+                        eta = [0.7, 0.8, 0.85, 0.9][Math.floor(Math.random() * 4)];
+                        break;
+                    case 'medium':
+                        P_auf = Math.floor(Math.random() * 5000) + 100;
+                        eta = (Math.floor(Math.random() * 40) + 60) / 100; // 0.6-0.99
+                        break;
+                    case 'hard':
+                        P_auf = Math.floor(Math.random() * 10000) + 500;
+                        eta = (Math.floor(Math.random() * 30) + 70) / 100; // 0.7-0.99
+                        break;
+                }
+
+                const subTypes = ['single_efficiency', 'total_efficiency'];
+                const subType = subTypes[Math.floor(Math.random() * subTypes.length)];
+
+                if (subType === 'single_efficiency') {
+                    const seeks = ['output_power', 'efficiency', 'input_power', 'loss_power'];
+                    seekType = seeks[Math.floor(Math.random() * seeks.length)];
+                    
+                    P_ab = Math.round(P_auf * eta * 100) / 100;
+                    
+                    switch (seekType) {
+                        case 'output_power':
+                            answer = P_ab;
+                            unit = 'W';
+                            question = `Ein Motor nimmt eine Leistung von P_auf = ${P_auf} W auf und hat einen Wirkungsgrad von η = ${Math.round(eta * 100)}%. Wie groß ist die abgegebene Leistung?`;
+                            hint = `Verwende P_ab = η × P_auf`;
+                            solution = `P_{ab} = \\eta \\times P_{auf} = ${eta} \\times ${P_auf} = ${P_ab} W`;
+                            steps = [
+                                `Gegeben: P_auf = ${P_auf} W, η = ${Math.round(eta * 100)}% = ${eta}`,
+                                `Gesucht: P_ab`,
+                                `Formel: P_ab = η × P_auf`,
+                                `P_ab = ${eta} × ${P_auf} = ${P_ab} W`
+                            ];
+                            break;
+                        case 'efficiency':
+                            answer = Math.round(eta * 100);
+                            unit = '%';
+                            question = `Ein Gerät nimmt P_auf = ${P_auf} W auf und gibt P_ab = ${P_ab} W ab. Wie groß ist der Wirkungsgrad in Prozent?`;
+                            hint = `Verwende η = P_ab / P_auf`;
+                            solution = `\\eta = \\frac{P_{ab}}{P_{auf}} = \\frac{${P_ab}}{${P_auf}} = ${eta} = ${Math.round(eta * 100)}\\%`;
+                            steps = [
+                                `Gegeben: P_auf = ${P_auf} W, P_ab = ${P_ab} W`,
+                                `Gesucht: η in %`,
+                                `Formel: η = P_ab / P_auf`,
+                                `η = ${P_ab} / ${P_auf} = ${eta} = ${Math.round(eta * 100)}%`
+                            ];
+                            break;
+                        case 'input_power':
+                            answer = P_auf;
+                            unit = 'W';
+                            question = `Ein Motor gibt eine Leistung von P_ab = ${P_ab} W ab und hat einen Wirkungsgrad von η = ${Math.round(eta * 100)}%. Wie groß ist die aufgenommene Leistung?`;
+                            hint = `Stelle η = P_ab / P_auf nach P_auf um: P_auf = P_ab / η`;
+                            solution = `P_{auf} = \\frac{P_{ab}}{\\eta} = \\frac{${P_ab}}{${eta}} = ${P_auf} W`;
+                            steps = [
+                                `Gegeben: P_ab = ${P_ab} W, η = ${Math.round(eta * 100)}% = ${eta}`,
+                                `Gesucht: P_auf`,
+                                `Umstellen: P_auf = P_ab / η`,
+                                `P_auf = ${P_ab} / ${eta} = ${P_auf} W`
+                            ];
+                            break;
+                        case 'loss_power':
+                            const P_verlust = Math.round((P_auf - P_ab) * 100) / 100;
+                            answer = P_verlust;
+                            unit = 'W';
+                            question = `Ein Motor nimmt P_auf = ${P_auf} W auf und gibt P_ab = ${P_ab} W ab. Wie groß ist die Verlustleistung?`;
+                            hint = `Verwende P_Verlust = P_auf - P_ab`;
+                            solution = `P_{Verlust} = P_{auf} - P_{ab} = ${P_auf} - ${P_ab} = ${P_verlust} W`;
+                            steps = [
+                                `Gegeben: P_auf = ${P_auf} W, P_ab = ${P_ab} W`,
+                                `Gesucht: P_Verlust`,
+                                `Formel: P_Verlust = P_auf - P_ab`,
+                                `P_Verlust = ${P_auf} - ${P_ab} = ${P_verlust} W`
+                            ];
+                            break;
+                    }
+                } else { // total_efficiency
+                    eta1 = (Math.floor(Math.random() * 25) + 75) / 100; // 0.75-0.99
+                    eta2 = (Math.floor(Math.random() * 25) + 75) / 100; // 0.75-0.99
+                    eta3 = (Math.floor(Math.random() * 25) + 75) / 100; // 0.75-0.99
+                    const eta_total = Math.round(eta1 * eta2 * eta3 * 10000) / 10000;
+                    
+                    const components = ['Motor', 'Getriebe', 'Generator'];
+                    
+                    answer = Math.round(eta_total * 100 * 100) / 100;
+                    unit = '%';
+                    seekType = 'total_efficiency';
+                    question = `Ein System besteht aus einem ${components[0]} (η₁ = ${Math.round(eta1 * 100)}%), einem ${components[1]} (η₂ = ${Math.round(eta2 * 100)}%) und einem ${components[2]} (η₃ = ${Math.round(eta3 * 100)}%). Wie groß ist der Gesamtwirkungsgrad?`;
+                    hint = `Verwende η_gesamt = η₁ × η₂ × η₃`;
+                    solution = `\\eta_{gesamt} = \\eta_1 \\times \\eta_2 \\times \\eta_3 = ${eta1} \\times ${eta2} \\times ${eta3} = ${eta_total} = ${answer}\\%`;
+                    steps = [
+                        `Gegeben: η₁ = ${Math.round(eta1 * 100)}%, η₂ = ${Math.round(eta2 * 100)}%, η₃ = ${Math.round(eta3 * 100)}%`,
+                        `Gesucht: η_gesamt`,
+                        `Formel: η_gesamt = η₁ × η₂ × η₃`,
+                        `η_gesamt = ${eta1} × ${eta2} × ${eta3} = ${eta_total} = ${answer}%`
+                    ];
+                }
+
+                return { question, answer, hint, solution, steps, unit, seekType };
+            }
+
+            createCombinedProblem(difficulty) {
+                // Combined electrical and mechanical problems
+                let P_el, P_mech, eta, U, I, F, v, question, answer, hint, solution, steps, unit, seekType;
+
+                switch (difficulty) {
+                    case 'easy':
+                        U = [12, 24, 48][Math.floor(Math.random() * 3)];
+                        I = [5, 10, 20][Math.floor(Math.random() * 3)];
+                        eta = [0.8, 0.85, 0.9][Math.floor(Math.random() * 3)];
+                        break;
+                    case 'medium':
+                        U = Math.floor(Math.random() * 400) + 50;
+                        I = (Math.floor(Math.random() * 50) + 5) / 10;
+                        eta = (Math.floor(Math.random() * 30) + 70) / 100;
+                        break;
+                    case 'hard':
+                        U = Math.floor(Math.random() * 1000) + 100;
+                        I = (Math.floor(Math.random() * 100) + 10) / 100;
+                        eta = (Math.floor(Math.random() * 25) + 75) / 100;
+                        break;
+                }
+
+                P_el = U * I;
+                P_mech = Math.round(P_el * eta * 100) / 100;
+                F = Math.floor(Math.random() * 1000) + 100;
+                v = Math.round(P_mech / F * 100) / 100;
+
+                const seeks = ['mechanical_from_electrical', 'force_from_electrical', 'electrical_from_mechanical'];
+                seekType = seeks[Math.floor(Math.random() * seeks.length)];
+
+                switch (seekType) {
+                    case 'mechanical_from_electrical':
+                        answer = P_mech;
+                        unit = 'W';
+                        question = `Ein Elektromotor wird mit U = ${U} V und I = ${I} A betrieben und hat einen Wirkungsgrad von η = ${Math.round(eta * 100)}%. Wie groß ist die mechanische Leistung?`;
+                        hint = `Berechne zuerst die elektrische Leistung, dann die mechanische`;
+                        solution = `P_{el} = U \\times I = ${U} \\times ${I} = ${P_el} W \\\\ P_{mech} = \\eta \\times P_{el} = ${eta} \\times ${P_el} = ${P_mech} W`;
+                        steps = [
+                            `Gegeben: U = ${U} V, I = ${I} A, η = ${Math.round(eta * 100)}%`,
+                            `Gesucht: P_mech`,
+                            `P_el = U × I = ${U} × ${I} = ${P_el} W`,
+                            `P_mech = η × P_el = ${eta} × ${P_el} = ${P_mech} W`
+                        ];
+                        break;
+                    case 'force_from_electrical':
+                        answer = F;
+                        unit = 'N';
+                        question = `Ein Elektromotor (U = ${U} V, I = ${I} A, η = ${Math.round(eta * 100)}%) treibt einen Schlitten mit v = ${v} m/s an. Wie groß ist die Zugkraft?`;
+                        hint = `Berechne die mechanische Leistung und verwende dann P = F × v`;
+                        solution = `P_{el} = ${U} \\times ${I} = ${P_el} W \\\\ P_{mech} = ${eta} \\times ${P_el} = ${P_mech} W \\\\ F = \\frac{P_{mech}}{v} = \\frac{${P_mech}}{${v}} = ${F} N`;
+                        steps = [
+                            `Gegeben: U = ${U} V, I = ${I} A, η = ${Math.round(eta * 100)}%, v = ${v} m/s`,
+                            `P_el = U × I = ${P_el} W`,
+                            `P_mech = η × P_el = ${P_mech} W`,
+                            `F = P_mech / v = ${P_mech} / ${v} = ${F} N`
+                        ];
+                        break;
+                    case 'electrical_from_mechanical':
+                        answer = P_el;
+                        unit = 'W';
+                        question = `Ein Motor soll mechanisch P_mech = ${P_mech} W abgeben und hat einen Wirkungsgrad von η = ${Math.round(eta * 100)}%. Wie groß ist die elektrische Aufnahme?`;
+                        hint = `Verwende P_el = P_mech / η`;
+                        solution = `P_{el} = \\frac{P_{mech}}{\\eta} = \\frac{${P_mech}}{${eta}} = ${P_el} W`;
+                        steps = [
+                            `Gegeben: P_mech = ${P_mech} W, η = ${Math.round(eta * 100)}%`,
+                            `Gesucht: P_el`,
+                            `Umstellen: P_el = P_mech / η`,
+                            `P_el = ${P_mech} / ${eta} = ${P_el} W`
+                        ];
+                        break;
+                }
+
+                return { question, answer, hint, solution, steps, unit, seekType };
+            }
+
+            displayQuestion() {
+                document.getElementById('mathExpression').innerHTML = `<p>${this.currentExercise.question}</p>`;
+            }
+
+            updateInputLabel() {
+                const unit = this.currentExercise.unit;
+                const seekType = this.currentExercise.seekType;
+                document.getElementById('unitLabel').textContent = unit;
+                
+                let label = '';
+                switch(unit) {
+                    case 'W':
+                        label = 'Leistung P = ';
+                        break;
+                    case 'V':
+                        label = 'Spannung U = ';
+                        break;
+                    case 'A':
+                        label = 'Strom I = ';
+                        break;
+                    case 'Ω':
+                        label = 'Widerstand R = ';
+                        break;
+                    case 'N':
+                        label = 'Kraft F = ';
+                        break;
+                    case 'm/s':
+                        label = 'Geschwindigkeit v = ';
+                        break;
+                    case 'Nm':
+                        label = 'Drehmoment M = ';
+                        break;
+                    case '1/s':
+                        label = 'Drehzahl n = ';
+                        break;
+                    case 'J':
+                        label = 'Arbeit W = ';
+                        break;
+                    case 'kWh':
+                        label = 'Energie W = ';
+                        break;
+                    case 'h':
+                        label = 'Zeit t = ';
+                        break;
+                    case '%':
+                        label = 'Wirkungsgrad η = ';
+                        break;
+                    default:
+                        label = 'Antwort = ';
+                }
+                document.getElementById('answerLabel').textContent = label;
+            }
+
+            checkAnswer() {
+                if (this.answered) return;
+
+                const userAnswer = parseFloat(document.getElementById('answer').value);
+                const feedback = document.getElementById('feedback');
+                
+                if (isNaN(userAnswer)) {
+                    feedback.innerHTML = '<div class="feedback-error">⚠️ Bitte geben Sie eine gültige Zahl ein.</div>';
+                    return;
+                }
+
+                this.answered = true;
+                this.totalAnswers++;
+
+                const tolerance = Math.abs(this.currentExercise.answer) * 0.02 + 0.01; // 2% + small absolute tolerance
+                
+                if (Math.abs(userAnswer - this.currentExercise.answer) <= tolerance) {
+                    this.correctAnswers++;
+                    feedback.innerHTML = `
+                        <div class="feedback-success">
+                            ✅ Richtig! Die Antwort ist ${this.currentExercise.answer} ${this.currentExercise.unit}.
+                        </div>
+                    `;
+                    
+                    // Auto-advance after correct answer
+                    setTimeout(() => {
+                        this.nextQuestion();
+                    }, 3000);
+                } else {
+                    feedback.innerHTML = `
+                        <div class="feedback-error">
+                            ❌ Falsch. Ihre Antwort: ${userAnswer} ${this.currentExercise.unit}<br>
+                            Richtige Antwort: ${this.currentExercise.answer} ${this.currentExercise.unit}
+                        </div>
+                    `;
+                    this.showSolution();
+                }
+
+                this.updateStats();
+                this.updateProgress();
+            }
+
+            showHint() {
+                const hint = document.getElementById('hint');
+                hint.innerHTML = `<div class="hint-content">💡 ${this.currentExercise.hint}</div>`;
+            }
+
+            showSolution() {
+                const solution = document.getElementById('solution');
+                solution.innerHTML = `
+                    <div class="solution-content">
+                        <h4>📖 Lösung:</h4>
+                        <p>$$${this.currentExercise.solution}$$</p>
+                    </div>
+                `;
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+
+            showSteps() {
+                const stepsDiv = document.getElementById('steps');
+                if (this.currentExercise.steps) {
+                    let stepsHtml = '<div class="solution-steps"><h4>📝 Lösungsschritte:</h4>';
+                    this.currentExercise.steps.forEach((step, index) => {
+                        stepsHtml += `
+                            <div class="solution-step">
+                                <div class="step-number">${index + 1}</div>
+                                <div class="step-content">${step}</div>
+                            </div>
+                        `;
+                    });
+                    stepsHtml += '</div>';
+                    stepsDiv.innerHTML = stepsHtml;
+                    
+                    if (window.MathJax) {
+                        MathJax.typesetPromise();
+                    }
+                }
+            }
+
+            nextQuestion() {
+                if (this.currentQuestion < this.totalQuestions) {
+                    this.currentQuestion++;
+                } else {
+                    this.currentQuestion = 1;
+                }
+                this.generateNewQuestion();
+                this.updateProgress();
+            }
+
+            previousQuestion() {
+                if (this.currentQuestion > 1) {
+                    this.currentQuestion--;
+                    this.generateNewQuestion();
+                    this.updateProgress();
+                }
+            }
+
+            updateProgress() {
+                const progress = (this.currentQuestion / this.totalQuestions) * 100;
+                document.getElementById('progressBar').style.width = `${progress}%`;
+                document.getElementById('currentQuestion').textContent = this.currentQuestion;
+                document.getElementById('totalQuestions').textContent = this.totalQuestions;
+                
+                // Update button states
+                document.getElementById('prevBtn').disabled = this.currentQuestion === 1;
+            }
+
+            updateStats() {
+                document.getElementById('correctAnswers').textContent = this.correctAnswers;
+                document.getElementById('totalAnswers').textContent = this.totalAnswers;
+                const successRate = this.totalAnswers > 0 ? Math.round((this.correctAnswers / this.totalAnswers) * 100) : 0;
+                document.getElementById('successRate').textContent = `${successRate}%`;
+                document.getElementById('currentDifficulty').textContent = this.getDifficultyText();
+            }
+
+            getDifficultyText() {
+                const difficultyMap = {
+                    'easy': 'Einfach',
+                    'medium': 'Mittel',
+                    'hard': 'Schwer'
+                };
+                return difficultyMap[this.difficulty] || 'Mittel';
+            }
+
+            changeDifficulty(newDifficulty) {
+                this.difficulty = newDifficulty;
+                this.generateNewQuestion();
+                this.updateStats();
+            }
+
+            clearFeedback() {
+                document.getElementById('feedback').innerHTML = '';
+                document.getElementById('hint').innerHTML = '';
+                document.getElementById('solution').innerHTML = '';
+                document.getElementById('steps').innerHTML = '';
+            }
+        }
+
+        // Global functions
+        let exercise;
+
+        function initializeExercise() {
+            exercise = new LeistungArbeitExercise();
+        }
+
+        function checkAnswer() {
+            exercise.checkAnswer();
+        }
+
+        function showHint() {
+            exercise.showHint();
+        }
+
+        function showSteps() {
+            exercise.showSteps();
+        }
+
+        function generateNewQuestion() {
+            exercise.generateNewQuestion();
+        }
+
+        function nextQuestion() {
+            exercise.nextQuestion();
+        }
+
+        function previousQuestion() {
+            exercise.previousQuestion();
+        }
+
+        function changeDifficulty() {
+            const difficulty = document.getElementById('difficulty').value;
+            exercise.changeDifficulty(difficulty);
+        }
+
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        }
+
+        function toggleTheory() {
+            const content = document.getElementById('theoryContent');
+            const icon = document.querySelector('.toggle-icon');
+            
+            if (content.style.display === 'none' || !content.style.display) {
+                content.style.display = 'block';
+                icon.textContent = '▲';
+            } else {
+                content.style.display = 'none';
+                icon.textContent = '▼';
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeExercise();
+            
+            // Track progress
+            if (window.parent && window.parent.emWizard) {
+                window.parent.emWizard.progressTracker.updateLastTopic(window.location.href);
+            }
+        });
+
+        // Track exercise completion
+        window.addEventListener('beforeunload', function() {
+            if (exercise && exercise.correctAnswers > 0) {
+                if (window.parent && window.parent.emWizard) {
+                    window.parent.emWizard.progressTracker.markExerciseCompleted('grundlagen', 'leistung-arbeit');
+                }
+            }
+        });
+    </script>
+
+    <style>
+        .unit-label {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: 600;
+            color: var(--siu-red);
+            font-size: var(--font-size-large);
+        }
+    </style>
+</body>
+</html>

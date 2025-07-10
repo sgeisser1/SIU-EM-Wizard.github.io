@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brüche - SIU-EM-Wizard</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/exercise.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="exercise-header">
+        <nav class="exercise-nav">
+            <div class="nav-left">
+                <a href="../../index.html" class="btn btn-secondary">← Zurück zur Übersicht</a>
+            </div>
+            <div class="nav-center">
+                <h1>Bruchrechnung</h1>
+            </div>
+            <div class="nav-right">
+                <div class="difficulty-selector">
+                    <select id="difficulty" onchange="changeDifficulty()">
+                        <option value="easy">Einfach</option>
+                        <option value="medium" selected>Mittel</option>
+                        <option value="hard">Schwer</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="exercise-container">
+        <!-- Progress Bar -->
+        <div class="exercise-progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+            <span class="progress-text">Aufgabe <span id="currentQuestion">1</span> von <span id="totalQuestions">10</span></span>
+        </div>
+
+        <!-- Theory Section (Collapsible) -->
+        <section class="theory-section" id="theorySection">
+            <div class="theory-header" onclick="toggleTheory()">
+                <h2>📚 Theorie: Bruchrechnung</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="theory-content" id="theoryContent">
+                <div class="theory-grid">
+                    <div class="theory-card">
+                        <h3>Bruch-Aufbau</h3>
+                        <p>Ein Bruch besteht aus:</p>
+                        <p>$$\frac{\text{Zähler}}{\text{Nenner}} = \frac{a}{b}$$</p>
+                        <p><strong>Beispiel:</strong> $\frac{3}{4}$ bedeutet "3 von 4 Teilen"</p>
+                    </div>
+                    <div class="theory-card">
+                        <h3>Addition/Subtraktion</h3>
+                        <p>Bei gleichen Nennern:</p>
+                        <p>$$\frac{a}{c} \pm \frac{b}{c} = \frac{a \pm b}{c}$$</p>
+                        <p>Bei verschiedenen Nennern: Erweitern auf gemeinsamen Nenner</p>
+                        <p><strong>Beispiel:</strong> $\frac{1}{2} + \frac{1}{3} = \frac{3}{6} + \frac{2}{6} = \frac{5}{6}$</p>
+                    </div>
+                    <div class="theory-card">
+                        <h3>Multiplikation</h3>
+                        <p>Zähler mal Zähler, Nenner mal Nenner:</p>
+                        <p>$$\frac{a}{b} \times \frac{c}{d} = \frac{a \times c}{b \times d}$$</p>
+                        <p><strong>Beispiel:</strong> $\frac{2}{3} \times \frac{4}{5} = \frac{8}{15}$</p>
+                    </div>
+                    <div class="theory-card">
+                        <h3>Division</h3>
+                        <p>Multipliziere mit dem Kehrwert:</p>
+                        <p>$$\frac{a}{b} \div \frac{c}{d} = \frac{a}{b} \times \frac{d}{c} = \frac{a \times d}{b \times c}$$</p>
+                        <p><strong>Beispiel:</strong> $\frac{2}{3} \div \frac{4}{5} = \frac{2}{3} \times \frac{5}{4} = \frac{10}{12} = \frac{5}{6}$</p>
+                    </div>
+                </div>
+                <div class="theory-tips">
+                    <h4>💡 Wichtige Regeln:</h4>
+                    <ul>
+                        <li><strong>Kürzen:</strong> Zähler und Nenner durch die gleiche Zahl teilen</li>
+                        <li><strong>Erweitern:</strong> Zähler und Nenner mit der gleichen Zahl multiplizieren</li>
+                        <li><strong>Gemeinsamer Nenner:</strong> Kleinstes gemeinsames Vielfaches (kgV)</li>
+                        <li><strong>Gemischte Zahlen:</strong> In unechte Brüche umwandeln</li>
+                        <li><strong>Kehrwert:</strong> Zähler und Nenner vertauschen</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Exercise Section -->
+        <section class="exercise-section">
+            <div class="exercise-card" id="exerciseCard">
+                <div class="exercise-question">
+                    <h3 id="questionText">Berechnen Sie:</h3>
+                    <div class="math-expression" id="mathExpression">
+                        $$\frac{1}{2} + \frac{1}{3} = ?$$
+                    </div>
+                </div>
+
+                <div class="exercise-input">
+                    <label for="numerator">Zähler:</label>
+                    <input type="number" id="numerator" placeholder="Zähler eingeben..." onkeypress="handleEnterKey(event)">
+                    
+                    <label for="denominator">Nenner:</label>
+                    <input type="number" id="denominator" placeholder="Nenner eingeben..." onkeypress="handleEnterKey(event)">
+                    
+                    <div class="input-buttons">
+                        <button class="btn btn-primary" onclick="checkAnswer()">Prüfen</button>
+                        <button class="btn btn-secondary" onclick="showHint()" id="hintBtn">💡 Hinweis</button>
+                        <button class="btn btn-secondary" onclick="showSteps()" id="stepsBtn">📖 Schritte</button>
+                    </div>
+                </div>
+
+                <div class="feedback" id="feedback"></div>
+                <div class="hint" id="hint"></div>
+                <div class="solution" id="solution"></div>
+                <div class="steps" id="steps"></div>
+            </div>
+
+            <div class="exercise-controls">
+                <button class="btn btn-secondary" onclick="previousQuestion()" id="prevBtn" disabled>← Vorherige</button>
+                <button class="btn btn-primary" onclick="generateNewQuestion()">Neue Aufgabe</button>
+                <button class="btn btn-secondary" onclick="nextQuestion()" id="nextBtn">Nächste →</button>
+            </div>
+        </section>
+
+        <!-- Visual Fraction Representation -->
+        <section class="visual-section">
+            <div class="visual-card">
+                <h3>🎨 Visuelle Darstellung</h3>
+                <div class="fraction-visual" id="fractionVisual">
+                    <div class="fraction-diagram">
+                        <canvas id="fractionCanvas" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Richtige Antworten</h4>
+                    <span class="stat-number" id="correctAnswers">0</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Gesamte Aufgaben</h4>
+                    <span class="stat-number" id="totalAnswers">0</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Erfolgsquote</h4>
+                    <span class="stat-number" id="successRate">0%</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Schwierigkeitsgrad</h4>
+                    <span class="stat-number" id="currentDifficulty">Mittel</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Exercise Logic for Bruchrechnung
+        class BruchrechnungExercise {
+            constructor() {
+                this.currentQuestion = 1;
+                this.totalQuestions = 10;
+                this.correctAnswers = 0;
+                this.totalAnswers = 0;
+                this.difficulty = 'medium';
+                this.currentExercise = null;
+                this.answered = false;
+                
+                this.setupCanvas();
+                this.generateNewQuestion();
+                this.updateStats();
+            }
+
+            setupCanvas() {
+                this.canvas = document.getElementById('fractionCanvas');
+                this.ctx = this.canvas.getContext('2d');
+            }
+
+            generateNewQuestion() {
+                this.answered = false;
+                this.currentExercise = this.createFractionExercise(this.difficulty);
+                this.displayQuestion();
+                this.clearFeedback();
+                this.clearInputs();
+                this.drawFractionVisual();
+                document.getElementById('numerator').focus();
+            }
+
+            createFractionExercise(difficulty) {
+                const operations = ['+', '-', '×', '÷'];
+                const op = operations[Math.floor(Math.random() * operations.length)];
+                
+                let num1, den1, num2, den2;
+                
+                switch (difficulty) {
+                    case 'easy':
+                        num1 = Math.floor(Math.random() * 5) + 1; // 1-5
+                        den1 = Math.floor(Math.random() * 6) + 2; // 2-7
+                        num2 = Math.floor(Math.random() * 5) + 1; // 1-5
+                        den2 = den1; // Same denominator for easy
+                        break;
+                    case 'medium':
+                        num1 = Math.floor(Math.random() * 8) + 1; // 1-8
+                        den1 = Math.floor(Math.random() * 8) + 2; // 2-9
+                        num2 = Math.floor(Math.random() * 8) + 1; // 1-8
+                        den2 = Math.floor(Math.random() * 8) + 2; // 2-9
+                        break;
+                    case 'hard':
+                        num1 = Math.floor(Math.random() * 12) + 1; // 1-12
+                        den1 = Math.floor(Math.random() * 12) + 2; // 2-13
+                        num2 = Math.floor(Math.random() * 12) + 1; // 1-12
+                        den2 = Math.floor(Math.random() * 12) + 2; // 2-13
+                        break;
+                }
+
+                // Ensure fractions are proper
+                if (num1 >= den1) num1 = den1 - 1;
+                if (num2 >= den2) num2 = den2 - 1;
+                if (num1 === 0) num1 = 1;
+                if (num2 === 0) num2 = 1;
+
+                let question, answer, hint, solution, steps;
+
+                switch (op) {
+                    case '+':
+                        const addResult = this.addFractions(num1, den1, num2, den2);
+                        question = `\\frac{${num1}}{${den1}} + \\frac{${num2}}{${den2}}`;
+                        answer = addResult;
+                        hint = den1 === den2 ? 
+                            `Gleiche Nenner: Addiere die Zähler` : 
+                            `Finde den gemeinsamen Nenner: ${this.lcm(den1, den2)}`;
+                        solution = `\\frac{${num1}}{${den1}} + \\frac{${num2}}{${den2}} = \\frac{${addResult.num}}{${addResult.den}}`;
+                        steps = this.generateFractionSteps(num1, den1, num2, den2, '+');
+                        break;
+                    case '-':
+                        const subResult = this.subtractFractions(num1, den1, num2, den2);
+                        question = `\\frac{${num1}}{${den1}} - \\frac{${num2}}{${den2}}`;
+                        answer = subResult;
+                        hint = den1 === den2 ? 
+                            `Gleiche Nenner: Subtrahiere die Zähler` : 
+                            `Finde den gemeinsamen Nenner: ${this.lcm(den1, den2)}`;
+                        solution = `\\frac{${num1}}{${den1}} - \\frac{${num2}}{${den2}} = \\frac{${subResult.num}}{${subResult.den}}`;
+                        steps = this.generateFractionSteps(num1, den1, num2, den2, '-');
+                        break;
+                    case '×':
+                        const mulResult = this.multiplyFractions(num1, den1, num2, den2);
+                        question = `\\frac{${num1}}{${den1}} \\times \\frac{${num2}}{${den2}}`;
+                        answer = mulResult;
+                        hint = `Multipliziere Zähler mit Zähler und Nenner mit Nenner`;
+                        solution = `\\frac{${num1}}{${den1}} \\times \\frac{${num2}}{${den2}} = \\frac{${num1 * num2}}{${den1 * den2}} = \\frac{${mulResult.num}}{${mulResult.den}}`;
+                        steps = this.generateFractionSteps(num1, den1, num2, den2, '×');
+                        break;
+                    case '÷':
+                        const divResult = this.divideFractions(num1, den1, num2, den2);
+                        question = `\\frac{${num1}}{${den1}} \\div \\frac{${num2}}{${den2}}`;
+                        answer = divResult;
+                        hint = `Multipliziere mit dem Kehrwert: \\frac{${num1}}{${den1}} \\times \\frac{${den2}}{${num2}}`;
+                        solution = `\\frac{${num1}}{${den1}} \\div \\frac{${num2}}{${den2}} = \\frac{${num1}}{${den1}} \\times \\frac{${den2}}{${num2}} = \\frac{${divResult.num}}{${divResult.den}}`;
+                        steps = this.generateFractionSteps(num1, den1, num2, den2, '÷');
+                        break;
+                }
+
+                return {
+                    type: 'fractions',
+                    difficulty,
+                    question,
+                    answer,
+                    hint,
+                    solution,
+                    steps,
+                    fractions: [{ num: num1, den: den1 }, { num: num2, den: den2 }],
+                    operation: op
+                };
+            }
+
+            generateFractionSteps(num1, den1, num2, den2, operation) {
+                const steps = [];
+                
+                switch (operation) {
+                    case '+':
+                        if (den1 === den2) {
+                            steps.push(`Gleiche Nenner: \\frac{${num1}}{${den1}} + \\frac{${num2}}{${den2}}`);
+                            steps.push(`Addiere die Zähler: \\frac{${num1} + ${num2}}{${den1}} = \\frac{${num1 + num2}}{${den1}}`);
+                        } else {
+                            const lcm = this.lcm(den1, den2);
+                            const newNum1 = num1 * (lcm / den1);
+                            const newNum2 = num2 * (lcm / den2);
+                            steps.push(`Verschiedene Nenner: finde kgV(${den1}, ${den2}) = ${lcm}`);
+                            steps.push(`Erweitere: \\frac{${num1}}{${den1}} = \\frac{${newNum1}}{${lcm}}, \\frac{${num2}}{${den2}} = \\frac{${newNum2}}{${lcm}}`);
+                            steps.push(`Addiere: \\frac{${newNum1}}{${lcm}} + \\frac{${newNum2}}{${lcm}} = \\frac{${newNum1 + newNum2}}{${lcm}}`);
+                        }
+                        break;
+                    case '-':
+                        if (den1 === den2) {
+                            steps.push(`Gleiche Nenner: \\frac{${num1}}{${den1}} - \\frac{${num2}}{${den2}}`);
+                            steps.push(`Subtrahiere die Zähler: \\frac{${num1} - ${num2}}{${den1}} = \\frac{${num1 - num2}}{${den1}}`);
+                        } else {
+                            const lcm = this.lcm(den1, den2);
+                            const newNum1 = num1 * (lcm / den1);
+                            const newNum2 = num2 * (lcm / den2);
+                            steps.push(`Verschiedene Nenner: finde kgV(${den1}, ${den2}) = ${lcm}`);
+                            steps.push(`Erweitere: \\frac{${num1}}{${den1}} = \\frac{${newNum1}}{${lcm}}, \\frac{${num2}}{${den2}} = \\frac{${newNum2}}{${lcm}}`);
+                            steps.push(`Subtrahiere: \\frac{${newNum1}}{${lcm}} - \\frac{${newNum2}}{${lcm}} = \\frac{${newNum1 - newNum2}}{${lcm}}`);
+                        }
+                        break;
+                    case '×':
+                        steps.push(`Multipliziere Zähler mit Zähler und Nenner mit Nenner`);
+                        steps.push(`\\frac{${num1} \\times ${num2}}{${den1} \\times ${den2}} = \\frac{${num1 * num2}}{${den1 * den2}}`);
+                        const mulResult = this.multiplyFractions(num1, den1, num2, den2);
+                        if (mulResult.num !== num1 * num2 || mulResult.den !== den1 * den2) {
+                            steps.push(`Kürze den Bruch: \\frac{${mulResult.num}}{${mulResult.den}}`);
+                        }
+                        break;
+                    case '÷':
+                        steps.push(`Division durch Multiplikation mit dem Kehrwert`);
+                        steps.push(`\\frac{${num1}}{${den1}} \\div \\frac{${num2}}{${den2}} = \\frac{${num1}}{${den1}} \\times \\frac{${den2}}{${num2}}`);
+                        steps.push(`= \\frac{${num1} \\times ${den2}}{${den1} \\times ${num2}} = \\frac{${num1 * den2}}{${den1 * num2}}`);
+                        const divResult = this.divideFractions(num1, den1, num2, den2);
+                        if (divResult.num !== num1 * den2 || divResult.den !== den1 * num2) {
+                            steps.push(`Kürze den Bruch: \\frac{${divResult.num}}{${divResult.den}}`);
+                        }
+                        break;
+                }
+                
+                return steps;
+            }
+
+            // Helper functions for fractions
+            gcd(a, b) {
+                a = Math.abs(a);
+                b = Math.abs(b);
+                return b === 0 ? a : this.gcd(b, a % b);
+            }
+
+            lcm(a, b) {
+                return (a * b) / this.gcd(a, b);
+            }
+
+            reduceFraction(num, den) {
+                const g = this.gcd(Math.abs(num), Math.abs(den));
+                return { num: num / g, den: den / g };
+            }
+
+            addFractions(num1, den1, num2, den2) {
+                const commonDen = this.lcm(den1, den2);
+                const newNum1 = num1 * (commonDen / den1);
+                const newNum2 = num2 * (commonDen / den2);
+                return this.reduceFraction(newNum1 + newNum2, commonDen);
+            }
+
+            subtractFractions(num1, den1, num2, den2) {
+                const commonDen = this.lcm(den1, den2);
+                const newNum1 = num1 * (commonDen / den1);
+                const newNum2 = num2 * (commonDen / den2);
+                return this.reduceFraction(newNum1 - newNum2, commonDen);
+            }
+
+            multiplyFractions(num1, den1, num2, den2) {
+                return this.reduceFraction(num1 * num2, den1 * den2);
+            }
+
+            divideFractions(num1, den1, num2, den2) {
+                return this.reduceFraction(num1 * den2, den1 * num2);
+            }
+
+            displayQuestion() {
+                document.getElementById('mathExpression').innerHTML = `$$${this.currentExercise.question} = ?$$`;
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+
+            drawFractionVisual() {
+                if (!this.ctx) return;
+                
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                if (!this.currentExercise.fractions) return;
+                
+                const fraction1 = this.currentExercise.fractions[0];
+                const fraction2 = this.currentExercise.fractions[1];
+                
+                this.drawFraction(50, 50, fraction1.num, fraction1.den, '#E31E24');
+                this.drawFraction(250, 50, fraction2.num, fraction2.den, '#666666');
+                
+                // Draw operation symbol
+                this.ctx.fillStyle = '#000000';
+                this.ctx.font = '24px Arial';
+                this.ctx.textAlign = 'center';
+                const operation = this.currentExercise.operation === '×' ? '×' : 
+                                this.currentExercise.operation === '÷' ? '÷' : this.currentExercise.operation;
+                this.ctx.fillText(operation, 200, 100);
+            }
+
+            drawFraction(x, y, numerator, denominator, color) {
+                const width = 100;
+                const height = 80;
+                const partWidth = width / denominator;
+                
+                // Draw outline
+                this.ctx.strokeStyle = '#000000';
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeRect(x, y, width, height);
+                
+                // Fill the numerator parts
+                this.ctx.fillStyle = color;
+                for (let i = 0; i < numerator && i < denominator; i++) {
+                    this.ctx.fillRect(x + i * partWidth + 1, y + 1, partWidth - 2, height - 2);
+                }
+                
+                // Draw division lines
+                this.ctx.strokeStyle = '#000000';
+                this.ctx.lineWidth = 1;
+                for (let i = 1; i < denominator; i++) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(x + i * partWidth, y);
+                    this.ctx.lineTo(x + i * partWidth, y + height);
+                    this.ctx.stroke();
+                }
+                
+                // Draw fraction text below
+                this.ctx.fillStyle = '#000000';
+                this.ctx.font = '16px Arial';
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(`${numerator}/${denominator}`, x + width/2, y + height + 20);
+            }
+
+            checkAnswer() {
+                if (this.answered) return;
+
+                const userNum = parseInt(document.getElementById('numerator').value);
+                const userDen = parseInt(document.getElementById('denominator').value);
+                const feedback = document.getElementById('feedback');
+                
+                if (isNaN(userNum) || isNaN(userDen)) {
+                    feedback.innerHTML = '<div class="feedback-error">⚠️ Bitte geben Sie sowohl Zähler als auch Nenner ein.</div>';
+                    return;
+                }
+
+                if (userDen === 0) {
+                    feedback.innerHTML = '<div class="feedback-error">⚠️ Der Nenner darf nicht null sein.</div>';
+                    return;
+                }
+
+                this.answered = true;
+                this.totalAnswers++;
+
+                const correctAnswer = this.currentExercise.answer;
+                
+                // Check if fractions are equivalent
+                const isCorrect = this.areFractionsEqual(userNum, userDen, correctAnswer.num, correctAnswer.den);
+
+                if (isCorrect) {
+                    this.correctAnswers++;
+                    feedback.innerHTML = `
+                        <div class="feedback-success">
+                            ✅ Richtig! Die Antwort ist $\\frac{${correctAnswer.num}}{${correctAnswer.den}}$.
+                            ${this.isReduced(userNum, userDen) ? '' : '<br><small>Tipp: Ihr Bruch kann noch gekürzt werden.</small>'}
+                        </div>
+                    `;
+                    
+                    // Auto-advance after correct answer
+                    setTimeout(() => {
+                        this.nextQuestion();
+                    }, 3000);
+                } else {
+                    feedback.innerHTML = `
+                        <div class="feedback-error">
+                            ❌ Falsch. Ihre Antwort: $\\frac{${userNum}}{${userDen}}$, Richtige Antwort: $\\frac{${correctAnswer.num}}{${correctAnswer.den}}$
+                        </div>
+                    `;
+                    this.showSolution();
+                }
+
+                this.updateStats();
+                this.updateProgress();
+                
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+
+            areFractionsEqual(num1, den1, num2, den2) {
+                // Cross multiply to check equivalence
+                return num1 * den2 === num2 * den1;
+            }
+
+            isReduced(num, den) {
+                return this.gcd(Math.abs(num), Math.abs(den)) === 1;
+            }
+
+            showHint() {
+                const hint = document.getElementById('hint');
+                hint.innerHTML = `<div class="hint-content">💡 ${this.currentExercise.hint}</div>`;
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+
+            showSolution() {
+                const solution = document.getElementById('solution');
+                solution.innerHTML = `
+                    <div class="solution-content">
+                        <h4>📖 Lösung:</h4>
+                        <p>$$${this.currentExercise.solution}$$</p>
+                    </div>
+                `;
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+
+            showSteps() {
+                const stepsDiv = document.getElementById('steps');
+                if (this.currentExercise.steps) {
+                    let stepsHtml = '<div class="solution-steps"><h4>📝 Lösungsschritte:</h4>';
+                    this.currentExercise.steps.forEach((step, index) => {
+                        stepsHtml += `
+                            <div class="solution-step">
+                                <div class="step-number">${index + 1}</div>
+                                <div class="step-content">$$${step}$$</div>
+                            </div>
+                        `;
+                    });
+                    stepsHtml += '</div>';
+                    stepsDiv.innerHTML = stepsHtml;
+                    
+                    if (window.MathJax) {
+                        MathJax.typesetPromise();
+                    }
+                }
+            }
+
+            nextQuestion() {
+                if (this.currentQuestion < this.totalQuestions) {
+                    this.currentQuestion++;
+                } else {
+                    this.currentQuestion = 1;
+                }
+                this.generateNewQuestion();
+                this.updateProgress();
+            }
+
+            previousQuestion() {
+                if (this.currentQuestion > 1) {
+                    this.currentQuestion--;
+                    this.generateNewQuestion();
+                    this.updateProgress();
+                }
+            }
+
+            updateProgress() {
+                const progress = (this.currentQuestion / this.totalQuestions) * 100;
+                document.getElementById('progressBar').style.width = `${progress}%`;
+                document.getElementById('currentQuestion').textContent = this.currentQuestion;
+                document.getElementById('totalQuestions').textContent = this.totalQuestions;
+                
+                // Update button states
+                document.getElementById('prevBtn').disabled = this.currentQuestion === 1;
+            }
+
+            updateStats() {
+                document.getElementById('correctAnswers').textContent = this.correctAnswers;
+                document.getElementById('totalAnswers').textContent = this.totalAnswers;
+                const successRate = this.totalAnswers > 0 ? Math.round((this.correctAnswers / this.totalAnswers) * 100) : 0;
+                document.getElementById('successRate').textContent = `${successRate}%`;
+                document.getElementById('currentDifficulty').textContent = this.getDifficultyText();
+            }
+
+            getDifficultyText() {
+                const difficultyMap = {
+                    'easy': 'Einfach',
+                    'medium': 'Mittel',
+                    'hard': 'Schwer'
+                };
+                return difficultyMap[this.difficulty] || 'Mittel';
+            }
+
+            changeDifficulty(newDifficulty) {
+                this.difficulty = newDifficulty;
+                this.generateNewQuestion();
+                this.updateStats();
+            }
+
+            clearFeedback() {
+                document.getElementById('feedback').innerHTML = '';
+                document.getElementById('hint').innerHTML = '';
+                document.getElementById('solution').innerHTML = '';
+                document.getElementById('steps').innerHTML = '';
+            }
+
+            clearInputs() {
+                document.getElementById('numerator').value = '';
+                document.getElementById('denominator').value = '';
+            }
+        }
+
+        // Global functions
+        let exercise;
+
+        function initializeExercise() {
+            exercise = new BruchrechnungExercise();
+        }
+
+        function checkAnswer() {
+            if (exercise) exercise.checkAnswer();
+        }
+
+        function showHint() {
+            if (exercise) exercise.showHint();
+        }
+
+        function showSteps() {
+            if (exercise) exercise.showSteps();
+        }
+
+        function generateNewQuestion() {
+            if (exercise) exercise.generateNewQuestion();
+        }
+
+        function nextQuestion() {
+            if (exercise) exercise.nextQuestion();
+        }
+
+        function previousQuestion() {
+            if (exercise) exercise.previousQuestion();
+        }
+
+        function changeDifficulty() {
+            const difficulty = document.getElementById('difficulty').value;
+            if (exercise) exercise.changeDifficulty(difficulty);
+        }
+
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        }
+
+        function toggleTheory() {
+            const content = document.getElementById('theoryContent');
+            const icon = document.querySelector('.toggle-icon');
+            
+            if (content.style.display === 'none' || !content.style.display) {
+                content.style.display = 'block';
+                icon.textContent = '▲';
+            } else {
+                content.style.display = 'none';
+                icon.textContent = '▼';
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeExercise();
+            
+            // Track progress
+            if (window.parent && window.parent.emWizard) {
+                window.parent.emWizard.progressTracker.updateLastTopic(window.location.href);
+            }
+        });
+
+        // Track exercise completion
+        window.addEventListener('beforeunload', function() {
+            if (exercise && exercise.correctAnswers > 0) {
+                if (window.parent && window.parent.emWizard) {
+                    window.parent.emWizard.progressTracker.markExerciseCompleted('grundlagen', 'brueche');
+                }
+            }
+        });
+    </script>
+
+    <style>
+        .visual-section {
+            background-color: var(--white);
+            border-radius: var(--border-radius-large);
+            box-shadow: 0 4px 20px var(--shadow);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .visual-card h3 {
+            text-align: center;
+            margin-bottom: var(--spacing-md);
+            color: var(--siu-black);
+        }
+
+        .fraction-visual {
+            text-align: center;
+        }
+
+        .fraction-diagram canvas {
+            border: 1px solid var(--siu-light-gray);
+            border-radius: var(--border-radius);
+        }
+    </style>
+</body>
+</html>

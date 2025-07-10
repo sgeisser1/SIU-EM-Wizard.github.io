@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ohmsches Gesetz - SIU-EM-Wizard</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/exercise.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="exercise-header">
+        <nav class="exercise-nav">
+            <div class="nav-left">
+                <a href="../../index.html" class="btn btn-secondary">← Zurück zur Übersicht</a>
+            </div>
+            <div class="nav-center">
+                <h1>Ohmsches Gesetz</h1>
+            </div>
+            <div class="nav-right">
+                <div class="difficulty-selector">
+                    <select id="difficulty" onchange="changeDifficulty()">
+                        <option value="easy">Einfach</option>
+                        <option value="medium" selected>Mittel</option>
+                        <option value="hard">Schwer</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="exercise-container">
+        <!-- Progress Bar -->
+        <div class="exercise-progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+            <span class="progress-text">Aufgabe <span id="currentQuestion">1</span> von <span id="totalQuestions">10</span></span>
+        </div>
+
+        <!-- Theory Section (Collapsible) -->
+        <section class="theory-section" id="theorySection">
+            <div class="theory-header" onclick="toggleTheory()">
+                <h2>📚 Theorie: Ohmsches Gesetz</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="theory-content" id="theoryContent">
+                <div class="theory-grid">
+                    <div class="theory-card">
+                        <h3>Das Ohmsche Gesetz</h3>
+                        <p>$$U = I \times R$$</p>
+                        <p>Die Spannung ist gleich dem Produkt aus Strom und Widerstand</p>
+                    </div>
+                    <div class="theory-card">
+                        <h3>Umstellungen</h3>
+                        <p>Strom: $$I = \frac{U}{R}$$</p>
+                        <p>Widerstand: $$R = \frac{U}{I}$$</p>
+                    </div>
+                    <div class="theory-card">
+                        <h3>Einheiten</h3>
+                        <ul>
+                            <li><strong>U:</strong> Spannung [V] (Volt)</li>
+                            <li><strong>I:</strong> Strom [A] (Ampere)</li>
+                            <li><strong>R:</strong> Widerstand [Ω] (Ohm)</li>
+                        </ul>
+                    </div>
+                    <div class="theory-card">
+                        <h3>Merkregel (Dreieck)</h3>
+                        <div style="text-align: center; margin: 10px;">
+                            <div style="display: inline-block; width: 80px; height: 80px; border: 2px solid #E31E24; position: relative; margin: 20px;">
+                                <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font-weight: bold;">U</div>
+                                <div style="position: absolute; bottom: 10px; left: 15px; font-weight: bold;">I</div>
+                                <div style="position: absolute; bottom: 10px; right: 15px; font-weight: bold;">R</div>
+                                <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #E31E24;"></div>
+                            </div>
+                        </div>
+                        <p><small>Abdecken der gesuchten Größe zeigt die Formel</small></p>
+                    </div>
+                </div>
+                <div class="theory-tips">
+                    <h4>💡 Wichtige Tipps:</h4>
+                    <ul>
+                        <li><strong>Einheiten beachten!</strong> Alle Werte in Grundeinheiten</li>
+                        <li><strong>Kommastellen:</strong> Bei Strom oft mA (Milliampere)</li>
+                        <li><strong>Probe:</strong> Ergebnis in ursprüngliche Formel einsetzen</li>
+                        <li><strong>Spezifischer Widerstand:</strong> Denken Sie an Leiter vs. Leitung!</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Exercise Section -->
+        <section class="exercise-section">
+            <div class="exercise-card" id="exerciseCard">
+                <div class="exercise-question">
+                    <h3 id="questionText">Berechnen Sie die gesuchte Größe:</h3>
+                    <div class="math-expression" id="mathExpression">
+                        <p>Gegeben: I = 2 A, R = 10 Ω</p>
+                        <p>Gesucht: U = ?</p>
+                    </div>
+                </div>
+
+                <div class="exercise-input">
+                    <label for="answer" id="answerLabel">Ihre Antwort:</label>
+                    <input type="number" id="answer" step="any" placeholder="Antwort eingeben..." onkeypress="handleEnterKey(event)">
+                    <span id="unitLabel" class="unit-label">V</span>
+                    <div class="input-buttons">
+                        <button class="btn btn-primary" onclick="checkAnswer()">Prüfen</button>
+                        <button class="btn btn-secondary" onclick="showHint()" id="hintBtn">💡 Hinweis</button>
+                        <button class="btn btn-secondary" onclick="showSteps()" id="stepsBtn">📖 Schritte</button>
+                    </div>
+                </div>
+
+                <div class="feedback" id="feedback"></div>
+                <div class="hint" id="hint"></div>
+                <div class="solution" id="solution"></div>
+                <div class="steps" id="steps"></div>
+            </div>
+
+            <div class="exercise-controls">
+                <button class="btn btn-secondary" onclick="previousQuestion()" id="prevBtn" disabled>← Vorherige</button>
+                <button class="btn btn-primary" onclick="generateNewQuestion()">Neue Aufgabe</button>
+                <button class="btn btn-secondary" onclick="nextQuestion()" id="nextBtn">Nächste →</button>
+            </div>
+        </section>
+
+        <!-- Visual Aid Section -->
+        <section class="visual-section">
+            <div class="visual-card">
+                <h3>🔌 Schaltkreis-Darstellung</h3>
+                <div class="circuit-container" id="circuitContainer">
+                    <canvas id="circuitCanvas" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Richtige Antworten</h4>
+                    <span class="stat-number" id="correctAnswers">0</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Gesamte Aufgaben</h4>
+                    <span class="stat-number" id="totalAnswers">0</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Erfolgsquote</h4>
+                    <span class="stat-number" id="successRate">0%</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Schwierigkeitsgrad</h4>
+                    <span class="stat-number" id="currentDifficulty">Mittel</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Exercise Logic for Ohmsches Gesetz
+        class OhmesGesetzExercise {
+            constructor() {
+                this.currentQuestion = 1;
+                this.totalQuestions = 10;
+                this.correctAnswers = 0;
+                this.totalAnswers = 0;
+                this.difficulty = 'medium';
+                this.currentExercise = null;
+                this.answered = false;
+                
+                this.setupCanvas();
+                this.generateNewQuestion();
+                this.updateStats();
+            }
+
+            setupCanvas() {
+                this.canvas = document.getElementById('circuitCanvas');
+                this.ctx = this.canvas.getContext('2d');
+            }
+
+            generateNewQuestion() {
+                this.answered = false;
+                this.currentExercise = this.createOhmsLawExercise(this.difficulty);
+                this.displayQuestion();
+                this.clearFeedback();
+                this.updateInputLabel();
+                this.drawCircuit();
+                document.getElementById('answer').value = '';
+                document.getElementById('answer').focus();
+            }
+
+            createOhmsLawExercise(difficulty) {
+                const unknowns = ['U', 'I', 'R'];
+                const solve_for = unknowns[Math.floor(Math.random() * unknowns.length)];
+                
+                let U, I, R;
+                
+                switch (difficulty) {
+                    case 'easy':
+                        I = Math.floor(Math.random() * 10) + 1; // 1 to 10 A
+                        R = Math.floor(Math.random() * 91) + 10; // 10 to 100 Ω
+                        U = I * R;
+                        break;
+                    case 'medium':
+                        I = (Math.floor(Math.random() * 50) + 1) / 10; // 0.1 to 5 A
+                        R = Math.floor(Math.random() * 951) + 50; // 50 to 1000 Ω
+                        U = Math.round(I * R * 10) / 10;
+                        break;
+                    case 'hard':
+                        I = (Math.floor(Math.random() * 100) + 1) / 100; // 0.01 to 1 A
+                        R = Math.floor(Math.random() * 9901) + 100; // 100 to 10k Ω
+                        U = Math.round(I * R * 100) / 100;
+                        break;
+                }
+
+                let question, answer, hint, solution, unit;
+
+                switch (solve_for) {
+                    case 'U':
+                        question = `Gegeben: I = ${I} A, R = ${R} Ω<br>Berechnen Sie die Spannung U.`;
+                        answer = U;
+                        unit = 'V';
+                        hint = `Verwende das Ohmsche Gesetz: U = I × R`;
+                        solution = `U = I \\times R = ${I} \\text{ A} \\times ${R} \\text{ Ω} = ${U} \\text{ V}`;
+                        break;
+                    case 'I':
+                        question = `Gegeben: U = ${U} V, R = ${R} Ω<br>Berechnen Sie den Strom I.`;
+                        answer = I;
+                        unit = 'A';
+                        hint = `Verwende das Ohmsche Gesetz: I = U/R`;
+                        solution = `I = \\frac{U}{R} = \\frac{${U} \\text{ V}}{${R} \\text{ Ω}} = ${I} \\text{ A}`;
+                        break;
+                    case 'R':
+                        question = `Gegeben: U = ${U} V, I = ${I} A<br>Berechnen Sie den Widerstand R.`;
+                        answer = R;
+                        unit = 'Ω';
+                        hint = `Verwende das Ohmsche Gesetz: R = U/I`;
+                        solution = `R = \\frac{U}{I} = \\frac{${U} \\text{ V}}{${I} \\text{ A}} = ${R} \\text{ Ω}`;
+                        break;
+                }
+
+                return {
+                    type: 'ohms_law',
+                    difficulty,
+                    question,
+                    answer,
+                    unit,
+                    hint,
+                    solution,
+                    steps: this.generateOhmsLawSteps(U, I, R, solve_for)
+                };
+            }
+
+            generateOhmsLawSteps(U, I, R, solve_for) {
+                const steps = [];
+                steps.push(`Ohmsches Gesetz: U = I \\times R`);
+                
+                switch (solve_for) {
+                    case 'U':
+                        steps.push(`Gegeben: I = ${I} \\text{ A}, R = ${R} \\text{ Ω}`);
+                        steps.push(`Gesucht: U`);
+                        steps.push(`Einsetzen: U = ${I} \\text{ A} \\times ${R} \\text{ Ω}`);
+                        steps.push(`Ergebnis: U = ${U} \\text{ V}`);
+                        break;
+                    case 'I':
+                        steps.push(`Umstellen nach I: I = \\frac{U}{R}`);
+                        steps.push(`Gegeben: U = ${U} \\text{ V}, R = ${R} \\text{ Ω}`);
+                        steps.push(`Gesucht: I`);
+                        steps.push(`Einsetzen: I = \\frac{${U} \\text{ V}}{${R} \\text{ Ω}}`);
+                        steps.push(`Ergebnis: I = ${I} \\text{ A}`);
+                        break;
+                    case 'R':
+                        steps.push(`Umstellen nach R: R = \\frac{U}{I}`);
+                        steps.push(`Gegeben: U = ${U} \\text{ V}, I = ${I} \\text{ A}`);
+                        steps.push(`Gesucht: R`);
+                        steps.push(`Einsetzen: R = \\frac{${U} \\text{ V}}{${I} \\text{ A}}`);
+                        steps.push(`Ergebnis: R = ${R} \\text{ Ω}`);
+                        break;
+                }
+                
+                return steps;
+            }
+
+            displayQuestion() {
+                const exercise = this.currentExercise;
+                document.getElementById('mathExpression').innerHTML = exercise.question;
+                
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+
+            updateInputLabel() {
+                const unit = this.currentExercise.unit;
+                document.getElementById('unitLabel').textContent = unit;
+                
+                let label = '';
+                switch(unit) {
+                    case 'V':
+                        label = 'Spannung U = ';
+                        break;
+                    case 'A':
+                        label = 'Strom I = ';
+                        break;
+                    case 'Ω':
+                        label = 'Widerstand R = ';
+                        break;
+                }
+                document.getElementById('answerLabel').textContent = label;
+            }
+
+            drawCircuit() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Draw basic circuit with battery, resistor, and current flow
+                const centerX = this.canvas.width / 2;
+                const centerY = this.canvas.height / 2;
+                const circuitWidth = 200;
+                const circuitHeight = 100;
+                
+                // Circuit lines
+                this.ctx.strokeStyle = '#000000';
+                this.ctx.lineWidth = 3;
+                
+                // Top line
+                this.ctx.beginPath();
+                this.ctx.moveTo(centerX - circuitWidth/2, centerY - circuitHeight/2);
+                this.ctx.lineTo(centerX + circuitWidth/2, centerY - circuitHeight/2);
+                this.ctx.stroke();
+                
+                // Bottom line
+                this.ctx.beginPath();
+                this.ctx.moveTo(centerX - circuitWidth/2, centerY + circuitHeight/2);
+                this.ctx.lineTo(centerX + circuitWidth/2, centerY + circuitHeight/2);
+                this.ctx.stroke();
+                
+                // Left line (with battery)
+                this.ctx.beginPath();
+                this.ctx.moveTo(centerX - circuitWidth/2, centerY - circuitHeight/2);
+                this.ctx.lineTo(centerX - circuitWidth/2, centerY - 20);
+                this.ctx.stroke();
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(centerX - circuitWidth/2, centerY + 20);
+                this.ctx.lineTo(centerX - circuitWidth/2, centerY + circuitHeight/2);
+                this.ctx.stroke();
+                
+                // Battery symbol
+                this.ctx.lineWidth = 6;
+                this.ctx.beginPath();
+                this.ctx.moveTo(centerX - circuitWidth/2 - 10, centerY - 15);
+                this.ctx.lineTo(centerX - circuitWidth/2 + 10, centerY - 15);
+                this.ctx.stroke();
+                
+                this.ctx.lineWidth = 2;
+                this.ctx.beginPath();
+                this.ctx.moveTo(centerX - circuitWidth/2 - 5, centerY + 15);
+                this.ctx.lineTo(centerX - circuitWidth/2 + 5, centerY + 15);
+                this.ctx.stroke();
+                
+                // Right line (with resistor)
+                this.ctx.lineWidth = 3;
+                this.ctx.beginPath();
+                this.ctx.moveTo(centerX + circuitWidth/2, centerY - circuitHeight/2);
+                this.ctx.lineTo(centerX + circuitWidth/2, centerY - 20);
+                this.ctx.stroke();
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(centerX + circuitWidth/2, centerY + 20);
+                this.ctx.lineTo(centerX + circuitWidth/2, centerY + circuitHeight/2);
+                this.ctx.stroke();
+                
+                // Resistor symbol (zigzag)
+                this.ctx.beginPath();
+                this.ctx.moveTo(centerX + circuitWidth/2, centerY - 20);
+                this.ctx.lineTo(centerX + circuitWidth/2 - 8, centerY - 10);
+                this.ctx.lineTo(centerX + circuitWidth/2 + 8, centerY);
+                this.ctx.lineTo(centerX + circuitWidth/2 - 8, centerY + 10);
+                this.ctx.lineTo(centerX + circuitWidth/2, centerY + 20);
+                this.ctx.stroke();
+                
+                // Current arrows
+                this.ctx.fillStyle = '#E31E24';
+                this.ctx.strokeStyle = '#E31E24';
+                this.ctx.lineWidth = 2;
+                
+                // Arrow on top
+                const arrowX = centerX;
+                const arrowY = centerY - circuitHeight/2 - 15;
+                this.ctx.beginPath();
+                this.ctx.moveTo(arrowX - 15, arrowY);
+                this.ctx.lineTo(arrowX + 15, arrowY);
+                this.ctx.moveTo(arrowX + 10, arrowY - 5);
+                this.ctx.lineTo(arrowX + 15, arrowY);
+                this.ctx.lineTo(arrowX + 10, arrowY + 5);
+                this.ctx.stroke();
+                
+                // Labels
+                this.ctx.fillStyle = '#000000';
+                this.ctx.font = '16px Arial';
+                this.ctx.textAlign = 'center';
+                
+                this.ctx.fillText('U', centerX - circuitWidth/2 - 30, centerY);
+                this.ctx.fillText('R', centerX + circuitWidth/2 + 30, centerY);
+                this.ctx.fillText('I', centerX, centerY - circuitHeight/2 - 30);
+            }
+
+            checkAnswer() {
+                if (this.answered) return;
+
+                const userAnswer = parseFloat(document.getElementById('answer').value);
+                const feedback = document.getElementById('feedback');
+                
+                if (isNaN(userAnswer)) {
+                    feedback.innerHTML = '<div class="feedback-error">⚠️ Bitte geben Sie eine gültige Zahl ein.</div>';
+                    return;
+                }
+
+                this.answered = true;
+                this.totalAnswers++;
+
+                const tolerance = Math.abs(this.currentExercise.answer) * 0.01 + 0.001; // 1% + small absolute tolerance
+                
+                if (Math.abs(userAnswer - this.currentExercise.answer) <= tolerance) {
+                    this.correctAnswers++;
+                    feedback.innerHTML = `
+                        <div class="feedback-success">
+                            ✅ Richtig! Die Antwort ist ${this.currentExercise.answer} ${this.currentExercise.unit}.
+                        </div>
+                    `;
+                    
+                    // Auto-advance after correct answer
+                    setTimeout(() => {
+                        this.nextQuestion();
+                    }, 2500);
+                } else {
+                    feedback.innerHTML = `
+                        <div class="feedback-error">
+                            ❌ Falsch. Ihre Antwort: ${userAnswer} ${this.currentExercise.unit}<br>
+                            Richtige Antwort: ${this.currentExercise.answer} ${this.currentExercise.unit}
+                        </div>
+                    `;
+                    this.showSolution();
+                }
+
+                this.updateStats();
+                this.updateProgress();
+            }
+
+            showHint() {
+                const hint = document.getElementById('hint');
+                hint.innerHTML = `<div class="hint-content">💡 ${this.currentExercise.hint}</div>`;
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+
+            showSolution() {
+                const solution = document.getElementById('solution');
+                solution.innerHTML = `
+                    <div class="solution-content">
+                        <h4>📖 Lösung:</h4>
+                        <p>${this.currentExercise.solution}</p>
+                    </div>
+                `;
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+
+            showSteps() {
+                const stepsDiv = document.getElementById('steps');
+                if (this.currentExercise.steps) {
+                    let stepsHtml = '<div class="solution-steps"><h4>📝 Lösungsschritte:</h4>';
+                    this.currentExercise.steps.forEach((step, index) => {
+                        stepsHtml += `
+                            <div class="solution-step">
+                                <div class="step-number">${index + 1}</div>
+                                <div class="step-content">${step}</div>
+                            </div>
+                        `;
+                    });
+                    stepsHtml += '</div>';
+                    stepsDiv.innerHTML = stepsHtml;
+                    
+                    if (window.MathJax) {
+                        MathJax.typesetPromise();
+                    }
+                }
+            }
+
+            nextQuestion() {
+                if (this.currentQuestion < this.totalQuestions) {
+                    this.currentQuestion++;
+                } else {
+                    this.currentQuestion = 1;
+                }
+                this.generateNewQuestion();
+                this.updateProgress();
+            }
+
+            previousQuestion() {
+                if (this.currentQuestion > 1) {
+                    this.currentQuestion--;
+                    this.generateNewQuestion();
+                    this.updateProgress();
+                }
+            }
+
+            updateProgress() {
+                const progress = (this.currentQuestion / this.totalQuestions) * 100;
+                document.getElementById('progressBar').style.width = `${progress}%`;
+                document.getElementById('currentQuestion').textContent = this.currentQuestion;
+                document.getElementById('totalQuestions').textContent = this.totalQuestions;
+                
+                // Update button states
+                document.getElementById('prevBtn').disabled = this.currentQuestion === 1;
+            }
+
+            updateStats() {
+                document.getElementById('correctAnswers').textContent = this.correctAnswers;
+                document.getElementById('totalAnswers').textContent = this.totalAnswers;
+                const successRate = this.totalAnswers > 0 ? Math.round((this.correctAnswers / this.totalAnswers) * 100) : 0;
+                document.getElementById('successRate').textContent = `${successRate}%`;
+                document.getElementById('currentDifficulty').textContent = this.getDifficultyText();
+            }
+
+            getDifficultyText() {
+                const difficultyMap = {
+                    'easy': 'Einfach',
+                    'medium': 'Mittel',
+                    'hard': 'Schwer'
+                };
+                return difficultyMap[this.difficulty] || 'Mittel';
+            }
+
+            changeDifficulty(newDifficulty) {
+                this.difficulty = newDifficulty;
+                this.generateNewQuestion();
+                this.updateStats();
+            }
+
+            clearFeedback() {
+                document.getElementById('feedback').innerHTML = '';
+                document.getElementById('hint').innerHTML = '';
+                document.getElementById('solution').innerHTML = '';
+                document.getElementById('steps').innerHTML = '';
+            }
+        }
+
+        // Global functions
+        let exercise;
+
+        function initializeExercise() {
+            exercise = new OhmesGesetzExercise();
+        }
+
+        function checkAnswer() {
+            if (exercise) exercise.checkAnswer();
+        }
+
+        function showHint() {
+            if (exercise) exercise.showHint();
+        }
+
+        function showSteps() {
+            if (exercise) exercise.showSteps();
+        }
+
+        function generateNewQuestion() {
+            if (exercise) exercise.generateNewQuestion();
+        }
+
+        function nextQuestion() {
+            if (exercise) exercise.nextQuestion();
+        }
+
+        function previousQuestion() {
+            if (exercise) exercise.previousQuestion();
+        }
+
+        function changeDifficulty() {
+            const difficulty = document.getElementById('difficulty').value;
+            if (exercise) exercise.changeDifficulty(difficulty);
+        }
+
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        }
+
+        function toggleTheory() {
+            const content = document.getElementById('theoryContent');
+            const icon = document.querySelector('.toggle-icon');
+            
+            if (content.style.display === 'none' || !content.style.display) {
+                content.style.display = 'block';
+                icon.textContent = '▲';
+            } else {
+                content.style.display = 'none';
+                icon.textContent = '▼';
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeExercise();
+            
+            // Track progress
+            if (window.parent && window.parent.emWizard) {
+                window.parent.emWizard.progressTracker.updateLastTopic(window.location.href);
+            }
+        });
+
+        // Track exercise completion
+        window.addEventListener('beforeunload', function() {
+            if (exercise && exercise.correctAnswers > 0) {
+                if (window.parent && window.parent.emWizard) {
+                    window.parent.emWizard.progressTracker.markExerciseCompleted('grundlagen', 'ohmsches-gesetz');
+                }
+            }
+        });
+    </script>
+
+    <style>
+        .unit-label {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: 600;
+            color: var(--siu-red);
+            font-size: var(--font-size-large);
+        }
+        
+        .visual-section {
+            background-color: var(--white);
+            border-radius: var(--border-radius-large);
+            box-shadow: 0 4px 20px var(--shadow);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .visual-card h3 {
+            text-align: center;
+            margin-bottom: var(--spacing-md);
+            color: var(--siu-black);
+        }
+
+        .circuit-container {
+            background-color: var(--white);
+            border: 2px solid var(--siu-light-gray);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-md) 0;
+            text-align: center;
+        }
+
+        .circuit-diagram {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</body>
+</html>

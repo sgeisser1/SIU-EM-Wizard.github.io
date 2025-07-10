@@ -1,315 +1,498 @@
-// --- UTILITY FUNCTIONS ---
-// Generates a random integer between min and max (inclusive)
-const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+// Exercise Generator for SIU-EM-Wizard
+// Generates various types of exercises for different topics
 
-// Finds the greatest common divisor for simplifying fractions
-const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
-
-// --- EXERCISE DATABASE ---
-const exercises = {
-    // --- MATHEMATICS ---
-    'math-fraction-add': {
-        title: "Bruchrechnung: Addition & Subtraktion",
-        description: "Berechnen Sie das Ergebnis und kürzen Sie so weit wie möglich.",
-        levels: ['Einfach', 'Mittel', 'Schwer'],
-        generate: (level) => {
-            let n1, d1, n2, d2, op, question, res_n, res_d;
-            if (level === 'Einfach') { // Common denominators
-                d1 = d2 = randInt(3, 9);
-                n1 = randInt(1, d1 - 1);
-                n2 = randInt(1, d1 - 1);
-            } else if (level === 'Mittel') { // Different denominators
-                d1 = randInt(3, 7);
-                d2 = randInt(3, 7);
-                n1 = randInt(1, d1 - 1);
-                n2 = randInt(1, d2 - 1);
-            } else { // Harder different denominators
-                d1 = randInt(5, 12);
-                d2 = randInt(5, 12);
-                n1 = randInt(2, d1 - 1);
-                n2 = randInt(2, d2 - 1);
-            }
-            op = Math.random() < 0.5 ? '+' : '-';
-            question = `\\frac{${n1}}{${d1}} ${op} \\frac{${n2}}{${d2}}`;
-
-            if (op === '+') {
-                res_n = n1 * d2 + n2 * d1;
-                res_d = d1 * d2;
-            } else {
-                res_n = n1 * d2 - n2 * d1;
-                res_d = d1 * d2;
-            }
-
-            const commonDivisor = gcd(Math.abs(res_n), Math.abs(res_d));
-            const simplified_n = res_n / commonDivisor;
-            const simplified_d = res_d / commonDivisor;
-
-            let answer = `\\frac{${simplified_n}}{${simplified_d}}`;
-            if (simplified_d === 1) answer = `${simplified_n}`;
-            if (simplified_n === 0) answer = '0';
-            
-            const solutionSteps = `
-                1. Hauptnenner finden: $${d1} \\cdot ${d2} = ${d1 * d2}$
-                2. Brüche erweitern: $\\frac{${n1} \\cdot ${d2}}{${d1 * d2}} ${op} \\frac{${n2} \\cdot ${d1}}{${d1 * d2}} = \\frac{${n1 * d2}}{${res_d}} ${op} \\frac{${n2 * d1}}{${res_d}}$
-                3. Zähler berechnen: $${n1 * d2} ${op} ${n2 * d1} = ${res_n}$
-                4. Ergebnis vor Kürzung: $\\frac{${res_n}}{${res_d}}$
-                5. Gekürztes Endergebnis: $${answer}$
-            `;
-            return { question, answer, solutionSteps };
-        },
-    },
-    'math-fraction-multiply': {
-        title: "Bruchrechnung: Multiplikation & Division",
-        description: "Berechnen Sie das Ergebnis. Bei Division, denken Sie an den Kehrwert.",
-        levels: ['Einfach', 'Mittel'],
-        generate: (level) => {
-            const d1 = randInt(3, 9), d2 = randInt(3, 9);
-            const n1 = randInt(1, 8), n2 = randInt(1, 8);
-            const op = Math.random() < 0.6 ? '\\cdot' : ':';
-            
-            let question = `\\frac{${n1}}{${d1}} ${op} \\frac{${n2}}{${d2}}`;
-            let res_n, res_d, solutionSteps;
-
-            if (op === '\\cdot') {
-                res_n = n1 * n2;
-                res_d = d1 * d2;
-                solutionSteps = `
-                    1. Zähler mal Zähler: $${n1} \\cdot ${n2} = ${res_n}$
-                    2. Nenner mal Nenner: $${d1} \\cdot ${d2} = ${res_d}$
-                    3. Ergebnis vor Kürzung: $\\frac{${res_n}}{${res_d}}$`;
-            } else { // Division
-                res_n = n1 * d2;
-                res_d = d1 * n2;
-                solutionSteps = `
-                    1. Mit dem Kehrwert multiplizieren: $\\frac{${n1}}{${d1}} \\cdot \\frac{${d2}}{${n2}}$
-                    2. Zähler mal Zähler: $${n1} \\cdot ${d2} = ${res_n}$
-                    3. Nenner mal Nenner: $${d1} \\cdot ${n2} = ${res_d}$
-                    4. Ergebnis vor Kürzung: $\\frac{${res_n}}{${res_d}}$`;
-            }
-
-            const commonDivisor = gcd(res_n, res_d);
-            const simplified_n = res_n / commonDivisor;
-            const simplified_d = res_d / commonDivisor;
-            let answer = `\\frac{${simplified_n}}{${simplified_d}}`;
-             if (simplified_d === 1) answer = `${simplified_n}`;
-
-            solutionSteps += `<br>5. Gekürztes Endergebnis: $${answer}$`;
-            return { question, answer, solutionSteps };
-        },
-    },
-    'math-equation-linear': {
-        title: "Lineare Gleichungen lösen",
-        description: "Stellen Sie die Gleichung um und finden Sie den Wert für x.",
-        levels: ['Einfach', 'Mittel', 'Schwer'],
-        generate: (level) => {
-            const a = randInt(2, 7), b = randInt(2, 15);
-            let c, d, question, solutionSteps, answer;
-            
-            if (level === 'Einfach') { // ax + b = c
-                c = randInt(10, 50);
-                question = `${a}x + ${b} = ${c}`;
-                answer = (c - b) / a;
-                solutionSteps = `
-                    ${a}x + ${b} = ${c} \\quad | -${b} \\\\
-                    ${a}x = ${c - b} \\quad | \\div ${a} \\\\
-                    x = \\frac{${c - b}}{${a}} = ${answer.toFixed(2)}
-                `;
-            } else { // ax + b = cx + d
-                c = randInt(2, 7);
-                if (a === c) c++; // Avoid 0x
-                d = randInt(2, 20);
-                question = `${a}x + ${b} = ${c}x + ${d}`;
-                answer = (d - b) / (a - c);
-                 solutionSteps = `
-                    ${a}x + ${b} = ${c}x + ${d} \\quad | -${c}x \\\\
-                    ${a-c}x + ${b} = ${d} \\quad | -${b} \\\\
-                    ${a-c}x = ${d - b} \\quad | \\div ${a-c} \\\\
-                    x = \\frac{${d - b}}{${a-c}} = ${answer.toFixed(2)}
-                `;
-            }
-            // Schwer is not implemented yet, but could involve brackets
-            return { question, answer: `x = ${answer.toFixed(2)}`, solutionSteps };
-        },
-    },
-    'math-equation-fractional': {
-        title: "Bruchgleichungen lösen",
-        description: "Lösen Sie die Gleichung nach x auf. (Analog Musterprüfung Aufgabe 1)",
-        levels: ['Musterprüfung'],
-        generate: (level) => {
-            const n1 = randInt(2, 5);
-            const n2 = randInt(n1 + 1, 10);
-            const a = randInt(1, 3);
-            const b = randInt(1, 3);
-
-            const question = `\\frac{${n1}}{x - ${a}} = \\frac{${n2}}{x + ${b}}`;
-            
-            const term1 = n1;
-            const term1x = n1;
-            const term2 = -n2 * a;
-            const term2x = n2;
-            
-            // n1(x+b) = n2(x-a) -> n1x + n1b = n2x - n2a
-            // n1b + n2a = n2x - n1x
-            // n1b + n2a = (n2 - n1)x
-            const x = (n1*b + n2*a) / (n2 - n1);
-            
-            const answer = `x = ${x.toFixed(3)}`;
-            const solutionSteps = `
-                1. Über Kreuz multiplizieren: $${n1}(x + ${b}) = ${n2}(x - ${a})$ <br>
-                2. Klammern auflösen: $${n1}x + ${n1*b} = ${n2}x - ${n2*a}$ <br>
-                3. Terme mit x auf eine Seite, Zahlen auf die andere: $${n1*b} + ${n2*a} = ${n2}x - ${n1}x$ <br>
-                4. Zusammenfassen: $${n1*b + n2*a} = ${n2-n1}x$ <br>
-                5. Nach x auflösen: $x = \\frac{${n1*b + n2*a}}{${n2-n1}} = ${x.toFixed(3)}$
-            `;
-            return { question, answer, solutionSteps };
-        }
-    },
-    
-    // --- DC CIRCUITS ---
-    'dc-ohm-law': {
-        title: "Ohmsches Gesetz",
-        description: "Berechnen Sie die fehlende Grösse (U, I oder R). Achten Sie auf die Einheiten!",
-        levels: ['Einfach', 'Mittel (mit k/m)'],
-        generate: (level) => {
-            const scenario = randInt(1, 3); // 1:U, 2:R, 3:I gesucht
-            let U, I, R, question, answer, solutionSteps;
-            const usePrefix = level !== 'Einfach';
-            
-            if (scenario === 1) { // U gesucht
-                I = usePrefix ? randInt(10, 500) / 1000 : randInt(1, 5); // A oder mA
-                R = usePrefix ? randInt(1, 10) * 1000 : randInt(10, 200); // Ohm oder kOhm
-                U = I * R;
-                const iUnit = usePrefix ? 'mA' : 'A';
-                const rUnit = usePrefix ? 'k\\Omega' : '\\Omega';
-                question = `Gegeben: $I = ${usePrefix ? I*1000 : I}\\,${iUnit}$, $R = ${usePrefix ? R/1000 : R}\\,${rUnit}$. <br>Gesucht: $U$ in Volt.`;
-                answer = `U = ${U.toFixed(2)}\\,V`;
-                solutionSteps = `$U = R \\cdot I = ${R}\\,\\Omega \\cdot ${I}\\,A = ${U.toFixed(2)}\\,V$`;
-            } else if (scenario === 2) { // R gesucht
-                U = randInt(5, 48);
-                I = randInt(50, 500) / 1000;
-                R = U / I;
-                question = `Gegeben: $U = ${U}\\,V$, $I = ${I*1000}\\,mA$. <br>Gesucht: $R$ in Ohm.`;
-                answer = `R = ${R.toFixed(2)}\\,\\Omega`;
-                solutionSteps = `$R = \\frac{U}{I} = \\frac{${U}\\,V}{${I}\\,A} = ${R.toFixed(2)}\\,\\Omega$`;
-            } else { // I gesucht
-                U = randInt(12, 230);
-                R = randInt(100, 2000);
-                I = U / R;
-                question = `Gegeben: $U = ${U}\\,V$, $R = ${R}\\,\\Omega$. <br>Gesucht: $I$ in Ampere und Milliampere.`;
-                answer = `I = ${I.toFixed(3)}\\,A = ${(I*1000).toFixed(1)}\\,mA`;
-                solutionSteps = `$I = \\frac{U}{R} = \\frac{${U}\\,V}{${R}\\,\\Omega} = ${I.toFixed(3)}\\,A$`;
-            }
-             return { question, answer, solutionSteps };
-        }
-    },
-    'dc-series-parallel': {
-        title: "Serien- & Parallelschaltung",
-        description: "Berechnen Sie den Gesamtwiderstand der Schaltung.",
-        levels: ['Serie', 'Parallel', 'Gemischt'],
-        generate: (level) => {
-            const R1 = randInt(10, 100);
-            const R2 = randInt(10, 100);
-            const R3 = randInt(10, 100);
-            let Rges, question, answer, solutionSteps;
-            
-            if(level === 'Serie') {
-                question = `Zwei Widerstände $R_1=${R1}\\,\\Omega$ und $R_2=${R2}\\,\\Omega$ sind in Serie geschaltet.`;
-                Rges = R1 + R2;
-                solutionSteps = `$R_{ges} = R_1 + R_2 = ${R1}\\,\\Omega + ${R2}\\,\\Omega = ${Rges}\\,\\Omega$`;
-            } else if (level === 'Parallel') {
-                question = `Zwei Widerstände $R_1=${R1}\\,\\Omega$ und $R_2=${R2}\\,\\Omega$ sind parallel geschaltet.`;
-                Rges = (R1 * R2) / (R1 + R2);
-                 solutionSteps = `$R_{ges} = \\frac{R_1 \\cdot R_2}{R_1 + R_2} = \\frac{${R1} \\cdot ${R2}}{${R1} + ${R2}} = \\frac{${R1*R2}}{${R1+R2}} = ${Rges.toFixed(2)}\\,\\Omega$`;
-            } else { // Gemischt
-                 question = `$R_1=${R1}\\,\\Omega$ ist in Serie zu einer Parallelschaltung von $R_2=${R2}\\,\\Omega$ und $R_3=${R3}\\,\\Omega$.`;
-                 const R23_parallel = (R2 * R3) / (R2 + R3);
-                 Rges = R1 + R23_parallel;
-                 solutionSteps = `
-                    1. Zuerst den Ersatzwiderstand der Parallelschaltung berechnen: <br>
-                    $R_{23} = \\frac{R_2 \\cdot R_3}{R_2 + R_3} = \\frac{${R2} \\cdot ${R3}}{${R2} + ${R3}} = ${R23_parallel.toFixed(2)}\\,\\Omega$ <br>
-                    2. Dann den Serienwiderstand addieren: <br>
-                    $R_{ges} = R_1 + R_{23} = ${R1}\\,\\Omega + ${R23_parallel.toFixed(2)}\\,\\Omega = ${Rges.toFixed(2)}\\,\\Omega$
-                 `;
-            }
-            answer = `R_ges = ${Rges.toFixed(2)}\\,\\Omega`;
-            return { question, answer, solutionSteps };
-        }
-    },
-};
-
-
-// --- DYNAMIC PAGE BUILDER ---
-function initExerciseGenerator() {
-    const containers = document.querySelectorAll('.exercise-container');
-    
-    containers.forEach(container => {
-        const exerciseId = container.dataset.exerciseId;
-        const exerciseData = exercises[exerciseId];
+class ExerciseGenerator {
+    constructor() {
+        this.difficultyLevels = {
+            easy: { min: 1, max: 20, complexity: 1 },
+            medium: { min: 10, max: 100, complexity: 2 },
+            hard: { min: 50, max: 500, complexity: 3 }
+        };
         
-        if (!exerciseData) {
-            container.innerHTML = `<p><strong>Fehler:</strong> Aufgabe mit ID "${exerciseId}" nicht gefunden.</p>`;
-            return;
+        // Material properties for specific resistance
+        this.materials = {
+            'Kupfer': 0.0175,
+            'Aluminium': 0.03,
+            'Eisen': 0.10,
+            'Silber': 0.017
+        };
+    }
+
+    // Generate random number within difficulty range
+    getRandomNumber(difficulty, options = {}) {
+        const level = this.difficultyLevels[difficulty] || this.difficultyLevels.medium;
+        const min = options.min || level.min;
+        const max = options.max || level.max;
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // Generate basic arithmetic exercises
+    generateArithmetic(difficulty = 'medium', operation = null) {
+        const operations = operation ? [operation] : ['+', '-', '×', '÷'];
+        const op = operations[Math.floor(Math.random() * operations.length)];
+        
+        let a, b, answer, question, hint, solution;
+
+        switch (difficulty) {
+            case 'easy':
+                a = this.getRandomNumber('easy', { max: 20 });
+                b = this.getRandomNumber('easy', { max: 20 });
+                break;
+            case 'medium':
+                a = this.getRandomNumber('medium', { max: 100 });
+                b = this.getRandomNumber('medium', { max: 100 });
+                break;
+            case 'hard':
+                a = this.getRandomNumber('hard', { max: 500 });
+                b = this.getRandomNumber('hard', { max: 500 });
+                break;
         }
 
-        // Build the HTML structure for the exercise
-        let levelOptions = exerciseData.levels.map(level => `<option value="${level}">${level}</option>`).join('');
+        switch (op) {
+            case '+':
+                answer = a + b;
+                question = `${a} + ${b}`;
+                hint = `Addieren Sie ${a} und ${b}`;
+                solution = `${a} + ${b} = ${answer}`;
+                break;
+            case '-':
+                if (a < b) [a, b] = [b, a]; // Ensure positive result
+                answer = a - b;
+                question = `${a} - ${b}`;
+                hint = `Subtrahieren Sie ${b} von ${a}`;
+                solution = `${a} - ${b} = ${answer}`;
+                break;
+            case '×':
+                if (difficulty === 'easy') {
+                    a = this.getRandomNumber('easy', { max: 12 });
+                    b = this.getRandomNumber('easy', { max: 12 });
+                } else if (difficulty === 'medium') {
+                    a = this.getRandomNumber('medium', { max: 25 });
+                    b = this.getRandomNumber('medium', { max: 25 });
+                }
+                answer = a * b;
+                question = `${a} \\times ${b}`;
+                hint = `Multiplizieren Sie ${a} mit ${b}`;
+                solution = `${a} \\times ${b} = ${answer}`;
+                break;
+            case '÷':
+                answer = this.getRandomNumber(difficulty, { min: 2, max: 20 });
+                a = answer * b;
+                question = `${a} \\div ${b}`;
+                hint = `Teilen Sie ${a} durch ${b}`;
+                solution = `${a} \\div ${b} = ${answer}`;
+                break;
+        }
 
-        container.innerHTML = `
-            <div class="exercise-header">
-                <hgroup>
-                    <h4>${exerciseData.title}</h4>
-                    <p>${exerciseData.description}</p>
-                </hgroup>
-                <div class="difficulty-selector">
-                    <select>${levelOptions}</select>
-                </div>
-            </div>
-            <div class="exercise-body">
-                <div class="question">Wähle eine Schwierigkeitsstufe und klicke auf "Neue Aufgabe".</div>
-                <div class="solution hidden">
-                    <h6>Lösungsweg</h6>
-                    <div class="solution-steps"></div>
-                </div>
-            </div>
-            <div class="grid">
-                <button class="generate-btn">Neue Aufgabe</button>
-                <button class="show-solution-btn secondary" disabled>Lösung anzeigen</button>
-            </div>
-        `;
+        return {
+            type: 'arithmetic',
+            difficulty,
+            question,
+            answer,
+            hint,
+            solution,
+            steps: this.generateArithmeticSteps(a, b, op, answer)
+        };
+    }
 
-        // Add event listeners
-        const generateBtn = container.querySelector('.generate-btn');
-        const showSolutionBtn = container.querySelector('.show-solution-btn');
-        const levelSelector = container.querySelector('select');
-        const questionDiv = container.querySelector('.question');
-        const solutionDiv = container.querySelector('.solution');
-        const solutionStepsDiv = container.querySelector('.solution-steps');
+    generateArithmeticSteps(a, b, operation, result) {
+        const steps = [];
+        
+        switch (operation) {
+            case '+':
+                steps.push(`Gegeben: ${a} + ${b}`);
+                steps.push(`Addiere die beiden Zahlen: ${a} + ${b} = ${result}`);
+                break;
+            case '-':
+                steps.push(`Gegeben: ${a} - ${b}`);
+                steps.push(`Subtrahiere ${b} von ${a}: ${a} - ${b} = ${result}`);
+                break;
+            case '×':
+                steps.push(`Gegeben: ${a} × ${b}`);
+                if (a <= 12 && b <= 12) {
+                    steps.push(`Verwende das kleine Einmaleins: ${a} × ${b} = ${result}`);
+                } else {
+                    steps.push(`Multipliziere ${a} mit ${b}: ${a} × ${b} = ${result}`);
+                }
+                break;
+            case '÷':
+                steps.push(`Gegeben: ${a} ÷ ${b}`);
+                steps.push(`Teile ${a} durch ${b}: ${a} ÷ ${b} = ${result}`);
+                steps.push(`Probe: ${result} × ${b} = ${a} ✓`);
+                break;
+        }
+        
+        return steps;
+    }
 
-        generateBtn.addEventListener('click', () => {
-            const level = levelSelector.value;
-            const { question, answer, solutionSteps } = exerciseData.generate(level);
+    // Generate fraction exercises
+    generateFractions(difficulty = 'medium', operation = null) {
+        const operations = operation ? [operation] : ['+', '-', '×', '÷'];
+        const op = operations[Math.floor(Math.random() * operations.length)];
+        
+        let num1, den1, num2, den2;
+        
+        switch (difficulty) {
+            case 'easy':
+                num1 = this.getRandomNumber('easy', { min: 1, max: 10 });
+                den1 = this.getRandomNumber('easy', { min: 2, max: 10 });
+                num2 = this.getRandomNumber('easy', { min: 1, max: 10 });
+                den2 = den1; // Same denominator for easy
+                break;
+            case 'medium':
+                num1 = this.getRandomNumber('easy', { min: 1, max: 15 });
+                den1 = this.getRandomNumber('easy', { min: 2, max: 12 });
+                num2 = this.getRandomNumber('easy', { min: 1, max: 15 });
+                den2 = this.getRandomNumber('easy', { min: 2, max: 12 });
+                break;
+            case 'hard':
+                num1 = this.getRandomNumber('medium', { min: 1, max: 25 });
+                den1 = this.getRandomNumber('medium', { min: 2, max: 20 });
+                num2 = this.getRandomNumber('medium', { min: 1, max: 25 });
+                den2 = this.getRandomNumber('medium', { min: 2, max: 20 });
+                break;
+        }
 
-            // Display question and hide solution
-            questionDiv.innerHTML = question;
-            solutionStepsDiv.innerHTML = `<strong>Antwort: $${answer}$</strong><br><hr>${solutionSteps}`;
-            solutionDiv.classList.add('hidden');
-            showSolutionBtn.disabled = false;
-            showSolutionBtn.textContent = 'Lösung anzeigen';
-            
-            // Re-render math formulas with KaTeX
-            renderMathInElement(container, {
-                delimiters: [
-                    {left: '$$', right: '$$', display: true},
-                    {left: '$', right: '$', display: false},
-                ]
-            });
-        });
+        // Ensure fractions are proper
+        if (num1 >= den1) num1 = den1 - 1;
+        if (num2 >= den2) num2 = den2 - 1;
+        if (num1 === 0) num1 = 1;
+        if (num2 === 0) num2 = 1;
 
-        showSolutionBtn.addEventListener('click', () => {
-            solutionDiv.classList.toggle('hidden');
-            showSolutionBtn.textContent = solutionDiv.classList.contains('hidden') 
-                ? 'Lösung anzeigen' 
-                : 'Lösung ausblenden';
-        });
-    });
+        let question, answer, hint, solution;
+
+        switch (op) {
+            case '+':
+                const addResult = this.addFractions(num1, den1, num2, den2);
+                question = `\\frac{${num1}}{${den1}} + \\frac{${num2}}{${den2}}`;
+                answer = addResult;
+                hint = den1 === den2 ? 
+                    `Gleiche Nenner: Addiere die Zähler` : 
+                    `Finde den gemeinsamen Nenner: ${this.lcm(den1, den2)}`;
+                solution = `\\frac{${num1}}{${den1}} + \\frac{${num2}}{${den2}} = \\frac{${addResult.num}}{${addResult.den}}`;
+                break;
+            case '-':
+                const subResult = this.subtractFractions(num1, den1, num2, den2);
+                question = `\\frac{${num1}}{${den1}} - \\frac{${num2}}{${den2}}`;
+                answer = subResult;
+                hint = den1 === den2 ? 
+                    `Gleiche Nenner: Subtrahiere die Zähler` : 
+                    `Finde den gemeinsamen Nenner: ${this.lcm(den1, den2)}`;
+                solution = `\\frac{${num1}}{${den1}} - \\frac{${num2}}{${den2}} = \\frac{${subResult.num}}{${subResult.den}}`;
+                break;
+            case '×':
+                const mulResult = this.multiplyFractions(num1, den1, num2, den2);
+                question = `\\frac{${num1}}{${den1}} \\times \\frac{${num2}}{${den2}}`;
+                answer = mulResult;
+                hint = `Multipliziere Zähler mit Zähler und Nenner mit Nenner`;
+                solution = `\\frac{${num1}}{${den1}} \\times \\frac{${num2}}{${den2}} = \\frac{${num1 * num2}}{${den1 * den2}} = \\frac{${mulResult.num}}{${mulResult.den}}`;
+                break;
+            case '÷':
+                const divResult = this.divideFractions(num1, den1, num2, den2);
+                question = `\\frac{${num1}}{${den1}} \\div \\frac{${num2}}{${den2}}`;
+                answer = divResult;
+                hint = `Multipliziere mit dem Kehrwert: \\frac{${num1}}{${den1}} \\times \\frac{${den2}}{${num2}}`;
+                solution = `\\frac{${num1}}{${den1}} \\div \\frac{${num2}}{${den2}} = \\frac{${num1}}{${den1}} \\times \\frac{${den2}}{${num2}} = \\frac{${divResult.num}}{${divResult.den}}`;
+                break;
+        }
+
+        return {
+            type: 'fractions',
+            difficulty,
+            question,
+            answer,
+            hint,
+            solution,
+            steps: this.generateFractionSteps(num1, den1, num2, den2, op)
+        };
+    }
+
+    generateFractionSteps(num1, den1, num2, den2, operation) {
+        const steps = [];
+        
+        switch (operation) {
+            case '+':
+                if (den1 === den2) {
+                    steps.push(`Gleiche Nenner: \\frac{${num1}}{${den1}} + \\frac{${num2}}{${den2}}`);
+                    steps.push(`Addiere die Zähler: \\frac{${num1} + ${num2}}{${den1}} = \\frac{${num1 + num2}}{${den1}}`);
+                } else {
+                    const lcm = this.lcm(den1, den2);
+                    const newNum1 = num1 * (lcm / den1);
+                    const newNum2 = num2 * (lcm / den2);
+                    steps.push(`Verschiedene Nenner: finde kgV(${den1}, ${den2}) = ${lcm}`);
+                    steps.push(`Erweitere: \\frac{${num1}}{${den1}} = \\frac{${newNum1}}{${lcm}}, \\frac{${num2}}{${den2}} = \\frac{${newNum2}}{${lcm}}`);
+                    steps.push(`Addiere: \\frac{${newNum1}}{${lcm}} + \\frac{${newNum2}}{${lcm}} = \\frac{${newNum1 + newNum2}}{${lcm}}`);
+                }
+                break;
+            case '-':
+                if (den1 === den2) {
+                    steps.push(`Gleiche Nenner: \\frac{${num1}}{${den1}} - \\frac{${num2}}{${den2}}`);
+                    steps.push(`Subtrahiere die Zähler: \\frac{${num1} - ${num2}}{${den1}} = \\frac{${num1 - num2}}{${den1}}`);
+                } else {
+                    const lcm = this.lcm(den1, den2);
+                    const newNum1 = num1 * (lcm / den1);
+                    const newNum2 = num2 * (lcm / den2);
+                    steps.push(`Verschiedene Nenner: finde kgV(${den1}, ${den2}) = ${lcm}`);
+                    steps.push(`Erweitere: \\frac{${num1}}{${den1}} = \\frac{${newNum1}}{${lcm}}, \\frac{${num2}}{${den2}} = \\frac{${newNum2}}{${lcm}}`);
+                    steps.push(`Subtrahiere: \\frac{${newNum1}}{${lcm}} - \\frac{${newNum2}}{${lcm}} = \\frac{${newNum1 - newNum2}}{${lcm}}`);
+                }
+                break;
+            case '×':
+                steps.push(`Multipliziere Zähler mit Zähler und Nenner mit Nenner`);
+                steps.push(`\\frac{${num1} \\times ${num2}}{${den1} \\times ${den2}} = \\frac{${num1 * num2}}{${den1 * den2}}`);
+                const mulResult = this.multiplyFractions(num1, den1, num2, den2);
+                if (mulResult.num !== num1 * num2 || mulResult.den !== den1 * den2) {
+                    steps.push(`Kürze den Bruch: \\frac{${mulResult.num}}{${mulResult.den}}`);
+                }
+                break;
+            case '÷':
+                steps.push(`Division durch Multiplikation mit dem Kehrwert`);
+                steps.push(`\\frac{${num1}}{${den1}} \\div \\frac{${num2}}{${den2}} = \\frac{${num1}}{${den1}} \\times \\frac{${den2}}{${num2}}`);
+                steps.push(`= \\frac{${num1} \\times ${den2}}{${den1} \\times ${num2}} = \\frac{${num1 * den2}}{${den1 * num2}}`);
+                const divResult = this.divideFractions(num1, den1, num2, den2);
+                if (divResult.num !== num1 * den2 || divResult.den !== den1 * num2) {
+                    steps.push(`Kürze den Bruch: \\frac{${divResult.num}}{${divResult.den}}`);
+                }
+                break;
+        }
+        
+        return steps;
+    }
+
+    // Generate linear equation exercises
+    generateLinearEquation(difficulty = 'medium') {
+        let a, b, x;
+        
+        switch (difficulty) {
+            case 'easy':
+                a = this.getRandomNumber('easy', { min: 1, max: 10 });
+                x = this.getRandomNumber('easy', { min: 1, max: 10 });
+                b = this.getRandomNumber('easy', { min: -20, max: 20 });
+                break;
+            case 'medium':
+                a = this.getRandomNumber('easy', { min: 2, max: 15 });
+                x = this.getRandomNumber('medium', { min: -20, max: 20 });
+                b = this.getRandomNumber('medium', { min: -50, max: 50 });
+                break;
+            case 'hard':
+                a = this.getRandomNumber('easy', { min: 2, max: 20 });
+                x = this.getRandomNumber('medium', { min: -30, max: 30 });
+                b = this.getRandomNumber('medium', { min: -100, max: 100 });
+                break;
+        }
+
+        // Generate equation: ax + b = c
+        const c = a * x + b;
+        const question = `${a}x ${b >= 0 ? '+' : ''} ${b} = ${c}`;
+        const answer = x;
+        const hint = `Isoliere x: Subtrahiere ${b}, dann teile durch ${a}`;
+        const solution = `x = \\frac{${c} - (${b})}{${a}} = \\frac{${c - b}}{${a}} = ${x}`;
+
+        return {
+            type: 'linear_equation',
+            difficulty,
+            question,
+            answer,
+            hint,
+            solution,
+            steps: this.generateLinearEquationSteps(a, b, c, x)
+        };
+    }
+
+    generateLinearEquationSteps(a, b, c, x) {
+        const steps = [];
+        steps.push(`Gegeben: ${a}x ${b >= 0 ? '+' : ''} ${b} = ${c}`);
+        
+        if (b !== 0) {
+            if (b > 0) {
+                steps.push(`Subtrahiere ${b} von beiden Seiten: ${a}x = ${c} - ${b}`);
+            } else {
+                steps.push(`Addiere ${Math.abs(b)} zu beiden Seiten: ${a}x = ${c} + ${Math.abs(b)}`);
+            }
+            steps.push(`Vereinfache: ${a}x = ${c - b}`);
+        }
+        
+        steps.push(`Teile beide Seiten durch ${a}: x = \\frac{${c - b}}{${a}}`);
+        steps.push(`Lösung: x = ${x}`);
+        steps.push(`Probe: ${a} \\cdot ${x} ${b >= 0 ? '+' : ''} ${b} = ${a * x + b} = ${c} ✓`);
+        
+        return steps;
+    }
+
+    // Generate Ohm's Law exercises
+    generateOhmsLaw(difficulty = 'medium', unknown = null) {
+        const unknowns = unknown ? [unknown] : ['U', 'I', 'R'];
+        const solve_for = unknowns[Math.floor(Math.random() * unknowns.length)];
+        
+        let U, I, R;
+        
+        switch (difficulty) {
+            case 'easy':
+                I = this.getRandomNumber('easy', { min: 1, max: 10 }); // 1 to 10 A
+                R = this.getRandomNumber('easy', { min: 10, max: 100 }); // 10 to 100 Ω
+                U = I * R;
+                break;
+            case 'medium':
+                I = (this.getRandomNumber('medium', { min: 1, max: 50 }) / 10); // 0.1 to 5 A
+                R = this.getRandomNumber('medium', { min: 50, max: 1000 }); // 50 to 1000 Ω
+                U = Math.round(I * R * 10) / 10;
+                break;
+            case 'hard':
+                I = (this.getRandomNumber('hard', { min: 1, max: 100 }) / 100); // 0.01 to 1 A
+                R = this.getRandomNumber('hard', { min: 100, max: 10000 }); // 100 to 10k Ω
+                U = Math.round(I * R * 100) / 100;
+                break;
+        }
+
+        let question, answer, hint, solution, unit;
+
+        switch (solve_for) {
+            case 'U':
+                question = `Gegeben: I = ${I} A, R = ${R} Ω<br>Berechnen Sie die Spannung U.`;
+                answer = U;
+                unit = 'V';
+                hint = `Verwende das Ohmsche Gesetz: U = I × R`;
+                solution = `U = I \\times R = ${I} \\text{ A} \\times ${R} \\text{ Ω} = ${U} \\text{ V}`;
+                break;
+            case 'I':
+                question = `Gegeben: U = ${U} V, R = ${R} Ω<br>Berechnen Sie den Strom I.`;
+                answer = I;
+                unit = 'A';
+                hint = `Verwende das Ohmsche Gesetz: I = U/R`;
+                solution = `I = \\frac{U}{R} = \\frac{${U} \\text{ V}}{${R} \\text{ Ω}} = ${I} \\text{ A}`;
+                break;
+            case 'R':
+                question = `Gegeben: U = ${U} V, I = ${I} A<br>Berechnen Sie den Widerstand R.`;
+                answer = R;
+                unit = 'Ω';
+                hint = `Verwende das Ohmsche Gesetz: R = U/I`;
+                solution = `R = \\frac{U}{I} = \\frac{${U} \\text{ V}}{${I} \\text{ A}} = ${R} \\text{ Ω}`;
+                break;
+        }
+
+        return {
+            type: 'ohms_law',
+            difficulty,
+            question,
+            answer,
+            unit,
+            hint,
+            solution,
+            steps: this.generateOhmsLawSteps(U, I, R, solve_for)
+        };
+    }
+
+    generateOhmsLawSteps(U, I, R, solve_for) {
+        const steps = [];
+        steps.push(`Ohmsches Gesetz: U = I \\times R`);
+        
+        switch (solve_for) {
+            case 'U':
+                steps.push(`Gegeben: I = ${I} \\text{ A}, R = ${R} \\text{ Ω}`);
+                steps.push(`Gesucht: U`);
+                steps.push(`Einsetzen: U = ${I} \\text{ A} \\times ${R} \\text{ Ω}`);
+                steps.push(`Ergebnis: U = ${U} \\text{ V}`);
+                break;
+            case 'I':
+                steps.push(`Umstellen nach I: I = \\frac{U}{R}`);
+                steps.push(`Gegeben: U = ${U} \\text{ V}, R = ${R} \\text{ Ω}`);
+                steps.push(`Gesucht: I`);
+                steps.push(`Einsetzen: I = \\frac{${U} \\text{ V}}{${R} \\text{ Ω}}`);
+                steps.push(`Ergebnis: I = ${I} \\text{ A}`);
+                break;
+            case 'R':
+                steps.push(`Umstellen nach R: R = \\frac{U}{I}`);
+                steps.push(`Gegeben: U = ${U} \\text{ V}, I = ${I} \\text{ A}`);
+                steps.push(`Gesucht: R`);
+                steps.push(`Einsetzen: R = \\frac{${U} \\text{ V}}{${I} \\text{ A}}`);
+                steps.push(`Ergebnis: R = ${R} \\text{ Ω}`);
+                break;
+        }
+        
+        return steps;
+    }
+
+    // Helper functions for fractions
+    gcd(a, b) {
+        a = Math.abs(a);
+        b = Math.abs(b);
+        return b === 0 ? a : this.gcd(b, a % b);
+    }
+
+    lcm(a, b) {
+        return (a * b) / this.gcd(a, b);
+    }
+
+    reduceFraction(num, den) {
+        const g = this.gcd(Math.abs(num), Math.abs(den));
+        return { num: num / g, den: den / g };
+    }
+
+    addFractions(num1, den1, num2, den2) {
+        const commonDen = this.lcm(den1, den2);
+        const newNum1 = num1 * (commonDen / den1);
+        const newNum2 = num2 * (commonDen / den2);
+        return this.reduceFraction(newNum1 + newNum2, commonDen);
+    }
+
+    subtractFractions(num1, den1, num2, den2) {
+        const commonDen = this.lcm(den1, den2);
+        const newNum1 = num1 * (commonDen / den1);
+        const newNum2 = num2 * (commonDen / den2);
+        return this.reduceFraction(newNum1 - newNum2, commonDen);
+    }
+
+    multiplyFractions(num1, den1, num2, den2) {
+        return this.reduceFraction(num1 * num2, den1 * den2);
+    }
+
+    divideFractions(num1, den1, num2, den2) {
+        return this.reduceFraction(num1 * den2, den1 * num2);
+    }
+
+    // Generate multiple choice questions
+    generateMultipleChoice(baseExercise) {
+        const correctAnswer = baseExercise.answer;
+        const choices = [correctAnswer];
+        
+        // Generate 3 incorrect options
+        for (let i = 0; i < 3; i++) {
+            let incorrectAnswer;
+            if (typeof correctAnswer === 'number') {
+                const variation = correctAnswer * (0.2 + Math.random() * 0.6); // 20-80% variation
+                incorrectAnswer = Math.random() > 0.5 ? 
+                    +(correctAnswer + variation).toFixed(2) : 
+                    +(correctAnswer - variation).toFixed(2);
+                
+                // Ensure different from correct answer
+                if (Math.abs(incorrectAnswer - correctAnswer) < 0.01) {
+                    incorrectAnswer = correctAnswer + (Math.random() > 0.5 ? 1 : -1);
+                }
+            } else {
+                // For non-numeric answers, generate plausible alternatives
+                incorrectAnswer = `Alternative ${i + 1}`;
+            }
+            choices.push(incorrectAnswer);
+        }
+        
+        // Shuffle choices
+        for (let i = choices.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [choices[i], choices[j]] = [choices[j], choices[i]];
+        }
+        
+        return {
+            ...baseExercise,
+            type: 'multiple_choice',
+            choices,
+            correctIndex: choices.indexOf(correctAnswer)
+        };
+    }
+}
+
+// Export for use in other modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = ExerciseGenerator;
+} else {
+    window.ExerciseGenerator = ExerciseGenerator;
 }

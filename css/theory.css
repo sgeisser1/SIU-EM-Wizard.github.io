@@ -1,0 +1,769 @@
+/* Theory Page Specific Styles */
+
+.theory-header {
+    background-color: var(--siu-black);
+    color: var(--white);
+    padding: var(--spacing-md) 0;
+    box-shadow: 0 2px 10px var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.theory-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-sm);
+}
+
+.nav-left, .nav-right {
+    flex: 1;
+}
+
+.nav-center {
+    flex: 2;
+    text-align: center;
+}
+
+.nav-center h1 {
+    margin: 0;
+    color: var(--white);
+    font-size: var(--font-size-xl);
+}
+
+.nav-right {
+    text-align: right;
+}
+
+/* Table of Contents */
+.theory-toc {
+    background-color: var(--siu-light-gray);
+    padding: var(--spacing-lg) 0;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 80px;
+    z-index: 90;
+}
+
+.theory-toc h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+    color: var(--siu-black);
+}
+
+.toc-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-sm) var(--spacing-lg);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.toc-list li {
+    margin: 0;
+}
+
+.toc-list a {
+    display: block;
+    padding: var(--spacing-xs) var(--spacing-md);
+    background-color: var(--white);
+    color: var(--siu-gray);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    transition: var(--transition);
+    border: 2px solid transparent;
+    font-weight: 500;
+}
+
+.toc-list a:hover,
+.toc-list a.active {
+    background-color: var(--siu-red);
+    color: var(--white);
+    border-color: var(--siu-red);
+}
+
+/* Theory Container */
+.theory-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-sm);
+}
+
+/* Theory Sections */
+.theory-section {
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-xl) 0;
+    border-bottom: 2px solid var(--siu-light-gray);
+}
+
+.theory-section:last-child {
+    border-bottom: none;
+}
+
+.theory-section h2 {
+    color: var(--siu-black);
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 3px solid var(--siu-red);
+    display: inline-block;
+}
+
+.theory-section h3 {
+    color: var(--siu-black);
+    font-size: var(--font-size-xl);
+    margin: var(--spacing-lg) 0 var(--spacing-md);
+}
+
+.theory-section h4 {
+    color: var(--siu-gray);
+    font-size: var(--font-size-large);
+    margin: var(--spacing-md) 0 var(--spacing-sm);
+}
+
+/* Content Blocks */
+.content-block {
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Information Grids */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+    margin: var(--spacing-lg) 0;
+}
+
+.info-card {
+    background-color: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-large);
+    box-shadow: 0 4px 20px var(--shadow);
+    border-left: 5px solid var(--siu-red);
+    transition: var(--transition);
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px var(--shadow-hover);
+}
+
+.info-card h4 {
+    color: var(--siu-red);
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-large);
+}
+
+.info-card p {
+    color: var(--siu-gray);
+    margin-bottom: var(--spacing-xs);
+}
+
+/* Formula Boxes */
+.formula-box {
+    background: linear-gradient(135deg, #f8f9fa 0%, var(--siu-light-gray) 100%);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-large);
+    border: 2px solid var(--siu-red);
+    margin: var(--spacing-lg) 0;
+    text-align: center;
+}
+
+.formula-box.highlight {
+    background: linear-gradient(135deg, #fff3f3 0%, #ffe6e6 100%);
+    border-color: var(--siu-red);
+    box-shadow: 0 4px 20px rgba(227, 30, 36, 0.2);
+}
+
+.formula-large {
+    font-size: 2rem;
+    margin: var(--spacing-md) 0;
+    color: var(--siu-black);
+    font-weight: 600;
+}
+
+.formula {
+    font-size: 1.2rem;
+    margin: var(--spacing-sm) 0;
+    color: var(--siu-black);
+    font-weight: 500;
+}
+
+.formula-description {
+    color: var(--siu-gray);
+    font-style: italic;
+    margin-top: var(--spacing-sm);
+}
+
+/* Operation Cards */
+.operation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin: var(--spacing-lg) 0;
+}
+
+.operation-card {
+    background-color: var(--white);
+    border-radius: var(--border-radius-large);
+    box-shadow: 0 4px 20px var(--shadow);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.operation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px var(--shadow-hover);
+}
+
+.operation-card h3 {
+    background-color: var(--siu-red);
+    color: var(--white);
+    padding: var(--spacing-md);
+    margin: 0 0 var(--spacing-md);
+    font-size: var(--font-size-xl);
+    text-align: center;
+}
+
+.operation-content {
+    padding: 0 var(--spacing-lg) var(--spacing-lg);
+}
+
+.operation-content ul {
+    margin: var(--spacing-sm) 0;
+    padding-left: var(--spacing-md);
+}
+
+.operation-content li {
+    margin-bottom: var(--spacing-xs);
+    color: var(--siu-gray);
+}
+
+/* Example Boxes */
+.example-box {
+    background-color: #e8f5e8;
+    border: 1px solid #c3e6c3;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    margin: var(--spacing-md) 0;
+}
+
+.example-box h5 {
+    color: #2d5a2d;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 600;
+}
+
+.example-box p {
+    color: #2d5a2d;
+    margin-bottom: var(--spacing-xs);
+    font-family: 'Courier New', monospace;
+}
+
+.example {
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm);
+    margin: var(--spacing-sm) 0;
+}
+
+.example p {
+    color: #856404;
+    margin: 0;
+}
+
+/* Rule Cards */
+.rule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+    margin: var(--spacing-lg) 0;
+}
+
+.rule-card {
+    background-color: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-large);
+    box-shadow: 0 4px 20px var(--shadow);
+    border-top: 4px solid var(--siu-red);
+}
+
+.rule-card h4 {
+    color: var(--siu-black);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-large);
+}
+
+.rule-card p {
+    color: var(--siu-gray);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Lists */
+.formula-list,
+.example-list,
+.rule-list,
+.step-list,
+.parameter-list {
+    margin: var(--spacing-sm) 0;
+    padding-left: var(--spacing-md);
+}
+
+.formula-list li,
+.example-list li {
+    margin-bottom: var(--spacing-xs);
+    font-family: 'Courier New', monospace;
+    color: var(--siu-gray);
+}
+
+.priority-list {
+    counter-reset: priority-counter;
+    list-style: none;
+    padding-left: 0;
+}
+
+.priority-list li {
+    counter-increment: priority-counter;
+    margin-bottom: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-sm) 3rem;
+    background-color: var(--siu-light-gray);
+    border-radius: var(--border-radius);
+    position: relative;
+}
+
+.priority-list li::before {
+    content: counter(priority-counter);
+    position: absolute;
+    left: var(--spacing-sm);
+    top: var(--spacing-sm);
+    background-color: var(--siu-red);
+    color: var(--white);
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+/* Method Cards */
+.method-card {
+    background-color: var(--siu-light-gray);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    margin: var(--spacing-md) 0;
+    border-left: 4px solid var(--siu-red);
+}
+
+.method-card h4 {
+    color: var(--siu-black);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Step by Step */
+.step-by-step {
+    background-color: var(--white);
+    border-radius: var(--border-radius-large);
+    box-shadow: 0 4px 20px var(--shadow);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-lg) 0;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--siu-light-gray);
+}
+
+.step:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.step-number {
+    background-color: var(--siu-red);
+    color: var(--white);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: var(--font-size-large);
+    flex-shrink: 0;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-content p {
+    margin: 0;
+    color: var(--siu-gray);
+}
+
+/* Concept Cards */
+.concept-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin: var(--spacing-lg) 0;
+}
+
+.concept-card {
+    background: linear-gradient(135deg, var(--white) 0%, var(--siu-light-gray) 100%);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-large);
+    box-shadow: 0 4px 20px var(--shadow);
+    text-align: center;
+    border-top: 4px solid var(--siu-red);
+    transition: var(--transition);
+}
+
+.concept-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px var(--shadow-hover);
+}
+
+.concept-card h4 {
+    color: var(--siu-red);
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-xl);
+}
+
+.concept-card p {
+    color: var(--siu-gray);
+    margin-bottom: var(--spacing-xs);
+}
+
+/* Formula Triangle (for Ohm's Law) */
+.formula-triangle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xl);
+    margin: var(--spacing-xl) 0;
+    flex-wrap: wrap;
+}
+
+.triangle-container {
+    text-align: center;
+}
+
+.triangle {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, var(--siu-red) 0%, #ff4757 100%);
+    margin: 0 auto var(--spacing-md);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    color: var(--white);
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.triangle-top {
+    position: absolute;
+    top: 30px;
+}
+
+.triangle-bottom {
+    position: absolute;
+    bottom: 30px;
+    display: flex;
+    gap: 40px;
+}
+
+.formula-variants {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.variant {
+    background-color: var(--white);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 10px var(--shadow);
+    min-width: 200px;
+}
+
+.variant h4 {
+    color: var(--siu-black);
+    margin-bottom: var(--spacing-xs);
+    font-size: var(--font-size-base);
+}
+
+/* Formula Variants Grid */
+.formula-variants-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+}
+
+.variant-card {
+    background-color: var(--siu-light-gray);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    text-align: center;
+    border-top: 3px solid var(--siu-red);
+}
+
+.variant-card h4 {
+    color: var(--siu-black);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Tables */
+.material-table {
+    margin: var(--spacing-lg) 0;
+}
+
+.material-table h4 {
+    color: var(--siu-black);
+    margin-bottom: var(--spacing-md);
+    text-align: center;
+}
+
+.material-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 4px 20px var(--shadow);
+}
+
+.material-table th,
+.material-table td {
+    padding: var(--spacing-md);
+    text-align: left;
+    border-bottom: 1px solid var(--siu-light-gray);
+}
+
+.material-table th {
+    background-color: var(--siu-black);
+    color: var(--white);
+    font-weight: 600;
+}
+
+.material-table tr:hover {
+    background-color: var(--siu-light-gray);
+}
+
+/* Example Grid */
+.example-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin: var(--spacing-lg) 0;
+}
+
+.example-card {
+    background-color: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-large);
+    box-shadow: 0 4px 20px var(--shadow);
+    border-left: 4px solid var(--siu-red);
+}
+
+.example-card h4 {
+    color: var(--siu-red);
+    margin-bottom: var(--spacing-md);
+}
+
+.example-card p {
+    margin-bottom: var(--spacing-xs);
+    color: var(--siu-gray);
+}
+
+/* Efficiency Examples */
+.efficiency-examples {
+    margin: var(--spacing-lg) 0;
+}
+
+.efficiency-examples h4 {
+    color: var(--siu-black);
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.efficiency-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-sm);
+}
+
+.efficiency-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--siu-light-gray);
+    border-radius: var(--border-radius);
+    border-left: 3px solid var(--siu-red);
+}
+
+.efficiency-item .device {
+    color: var(--siu-gray);
+    font-weight: 500;
+}
+
+.efficiency-item .efficiency {
+    color: var(--siu-red);
+    font-weight: 700;
+}
+
+/* Example Block */
+.example-block {
+    background-color: var(--siu-light-gray);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-large);
+    margin: var(--spacing-lg) 0;
+}
+
+.example-block h3 {
+    color: var(--siu-black);
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Footer Navigation */
+.theory-footer {
+    background-color: var(--siu-black);
+    color: var(--white);
+    padding: var(--spacing-lg) 0;
+    margin-top: var(--spacing-xl);
+}
+
+.footer-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-sm);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .theory-nav {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        text-align: center;
+    }
+
+    .nav-left, .nav-center, .nav-right {
+        flex: none;
+    }
+
+    .theory-toc {
+        position: static;
+    }
+
+    .toc-list {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .formula-triangle {
+        flex-direction: column;
+    }
+
+    .triangle {
+        width: 150px;
+        height: 150px;
+        font-size: 1.2rem;
+    }
+
+    .triangle-bottom {
+        gap: 30px;
+    }
+
+    .operation-grid,
+    .info-grid,
+    .rule-grid,
+    .concept-grid,
+    .example-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .formula-large {
+        font-size: 1.5rem;
+    }
+
+    .theory-section h2 {
+        font-size: 2rem;
+    }
+
+    .theory-container {
+        padding: var(--spacing-lg) var(--spacing-xs);
+    }
+
+    .footer-nav {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .theory-section h2 {
+        font-size: 1.8rem;
+    }
+
+    .formula-large {
+        font-size: 1.2rem;
+    }
+
+    .triangle {
+        width: 120px;
+        height: 120px;
+        font-size: 1rem;
+    }
+
+    .triangle-bottom {
+        gap: 20px;
+    }
+
+    .operation-card,
+    .info-card,
+    .rule-card,
+    .concept-card,
+    .example-card {
+        margin: 0 var(--spacing-xs);
+    }
+}
+
+/* Print Styles */
+@media print {
+    .theory-header,
+    .theory-toc,
+    .theory-footer {
+        display: none;
+    }
+
+    .theory-section {
+        page-break-inside: avoid;
+    }
+
+    .formula-box,
+    .example-block {
+        border: 1px solid var(--siu-black);
+    }
+}

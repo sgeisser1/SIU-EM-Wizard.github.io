@@ -1,41 +1,121 @@
-# SIU-EM-Wizard.github.io
-Der SIU-EM-Wizard ist eine Übungsplatform für die Studierenden des SIU's in Elektrotechnik und Mathematik im ersten Semester.
+# SIU-EM-Wizard 🧙‍♂️⚡
 
+Eine interaktive Lernplattform für Elektrotechnik und Mathematik des ersten Semesters an der SIU (Schweizerisches Institut für Unternehmerschulung).
 
-# SIU-EM-Wizard: Interaktive Übungsplattform
+## 🎯 Zielgruppe
 
-Willkommen beim SIU-EM-Wizard! Diese Webseite ist eine interaktive Lern- und Übungsplattform für Studierende des ersten Semesters im Lehrgang Elektrotechnik & Mathematik an der Höheren Fachschule (SIU).
+Diese Plattform richtet sich an Studierende der höheren Fachschule im Bereich Elektrotechnik, die nach ihrer Lehre und Berufstätigkeit ihre Mathematik- und Elektrotechnik-Kenntnisse auffrischen möchten.
 
-## Zielsetzung
+## 📚 Lernbereiche
 
-Viele Studierende steigen nach einer beruflichen Pause wieder in die theoretischen Grundlagen ein. Diese Plattform soll dabei helfen, Lücken in den fundamentalen mathematischen und elektrotechnischen Konzepten zu schliessen und Selbstvertrauen für die Prüfungen aufzubauen.
+### 1. **Grundlagen der Elektrotechnik & Mathematik**
+- Grundrechenarten, Brüche, Klammern, Potenzen
+- Lineare Gleichungen mit einer Unbekannten
+- Grundbegriffe der Elektrotechnik (Strom, Spannung, Widerstand)
+- Ohmsches Gesetz und spezifischer Widerstand
+- Arbeit, Leistung und Wirkungsgrad
 
-Die Aufgaben sind so konzipiert, dass sie:
-- **Unbegrenzt** geübt werden können (Werte werden zufällig generiert).
-- **Sofortiges Feedback** durch aufdeckbare Lösungswege bieten.
-- **Verschiedene Schwierigkeitsstufen** abdecken, um individuelles Lernen zu fördern.
+### 2. **Widerstandsschaltungen & Netzwerkberechnung**
+- Serie- und Parallelschaltungen
+- Gemischte Schaltungen und Spannungsteiler
+- Brückenschaltungen
+- Kirchhoffsche Gesetze
+- Überlagerungsmethode
 
-## Themenbereiche
+### 3. **Koordinatensysteme & Trigonometrie**
+- Kartesische und polare Koordinatensysteme
+- Trigonometrische Funktionen
+- Satz des Pythagoras
+- Winkelberechnungen (RAD/DEG)
 
-Die Plattform ist in die Kernbereiche des ersten Semesters gegliedert:
+### 4. **Elektrisches Feld & Kondensatoren**
+- Elektrische Feldstärke
+- Kondensator-Eigenschaften und -aufbau
+- Kapazitätsberechnungen
+- Serie- und Parallelschaltungen von Kondensatoren
 
-- **Mathematische Grundlagen:** Bruchrechnung, Potenzgesetze, Termumformungen und Gleichungen.
-- **Gleichstromkreise:** Ohmsches Gesetz, Leistung, Wirkungsgrad, Serien- & Parallelschaltungen.
-- **Netzwerkanalyse:** Kirchhoffsche Gesetze (Knoten- & Maschenregel), Überlagerungsverfahren.
-- **Koordinatensysteme & Trigonometrie:** Kartesische/Polare Koordinaten, Pythagoras, Winkelfunktionen.
-- **Prüfungsvorbereitung:** Interaktive Versionen der offiziellen Musterprüfungen.
+### 5. **Magnetismus & Induktivitäten**
+- Magnetfeld und Kräfte
+- Induktionsgesetz
+- Praktische Anwendungen von Induktivitäten
 
-## Technologie
+### 6. **Zeitabhängige Schaltungen**
+- Exponentialfunktionen
+- RC-Schaltungen (Lade-/Entladevorgänge)
+- Zeitkonstanten
 
-- **Hosting:** GitHub Pages
-- **Struktur:** HTML5
-- **Design:** CSS3 (mit Pico.css als leichtgewichtiges Framework)
-- **Interaktivität:** Vanilla JavaScript
-- **Formel-Darstellung:** KaTeX (eine schnelle Alternative zu LaTeX)
+### 7. **Wechselstromkreis**
+- Wirk- und Blindwiderstand
+- Reaktive Elemente im Wechselstromkreis
+- Leistungsberechnungen
 
-## Benutzung
+### 8. **Filter**
+- Hoch- und Tiefpassfilter
+- Bode-Diagramme
+- Grenzfrequenz und Phasenverschiebung
 
-Navigieren Sie einfach über das Menü zum gewünschten Themenbereich. Wählen Sie eine Aufgabe und eine Schwierigkeitsstufe aus und klicken Sie auf "Neue Aufgabe generieren". Nachdem Sie die Aufgabe gelöst haben, können Sie Ihre Lösung mit dem detaillierten Lösungsweg vergleichen, indem Sie auf "Lösung anzeigen" klicken.
+## ✨ Features
+
+- **📱 Responsive Design**: Funktioniert auf allen Geräten
+- **🧮 LaTeX-Unterstützung**: Professionelle mathematische Darstellung
+- **📊 Fortschrittsverfolgung**: Verfolgen Sie Ihren Lernfortschritt
+- **🎯 Adaptive Schwierigkeit**: Aufgaben passen sich Ihrem Niveau an
+- **✅ Sofortige Kontrolle**: Lösungen auf Knopfdruck
+- **🔄 Zufallsgenerator**: Unendlich viele Übungsaufgaben
+- **📋 Musterprüfungen**: Original-Prüfungsaufgaben zum Üben
+
+## 🚀 Installation & Nutzung
+
+### Als GitHub Pages Website:
+1. Forken Sie das Repository
+2. Aktivieren Sie GitHub Pages in den Repository-Einstellungen
+3. Die Website ist unter `https://[ihr-username].github.io/SIU-EM-Wizard` verfügbar
+
+### Lokale Entwicklung:
+```bash
+git clone https://github.com/[ihr-username]/SIU-EM-Wizard.git
+cd SIU-EM-Wizard
+# Öffnen Sie index.html in Ihrem Browser
+```
+
+## 🛠️ Technologie-Stack
+
+- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
+- **Mathematik**: MathJax für LaTeX-Rendering
+- **Styling**: Custom CSS mit SIU-Corporate Design
+- **Daten**: JSON-basierte Aufgaben- und Fortschrittsspeicherung
+- **Deployment**: GitHub Pages
+
+## 🎨 Design
+
+Das Design orientiert sich am SIU-Corporate Design mit den Farben:
+- **Schwarz** (#000000) - Haupttexte und Navigation
+- **Grau** (#666666) - Sekundäre Elemente
+- **Rot** (#E31E24) - Akzente und Call-to-Actions
+
+## 📖 Verwendung
+
+1. **Theorie studieren**: Lesen Sie die kompakten Theoriekapitel
+2. **Übungen lösen**: Wählen Sie Ihr Thema und Schwierigkeitslevel
+3. **Fortschritt verfolgen**: Sehen Sie Ihre Verbesserungen in Echtzeit
+4. **Prüfung vorbereiten**: Nutzen Sie die Musterprüfungen
+5. **Tools verwenden**: Taschenrechner und Formelsammlung
+
+## 🤝 Beitrag
+
+Verbesserungsvorschläge und neue Aufgaben sind willkommen! Erstellen Sie einen Pull Request oder öffnen Sie ein Issue.
+
+## 📝 Lizenz
+
+Dieses Projekt steht unter der MIT-Lizenz. Siehe [LICENSE](LICENSE) für Details.
+
+## 👨‍🏫 Über den Autor
+
+Entwickelt von einem Dozenten der SIU für Elektrotechnik und Mathematik im ersten Semester der höheren Fachschule.
 
 ---
-*Erstellt für den Unterricht an der SIU. Feedback und Anregungen sind jederzeit willkommen.*
+
+**🏫 SIU - Schweizerisches Institut für Unternehmerschulung**  
+Website: [www.siu.ch](https://www.siu.ch/)
+
+*Lernen Sie Elektrotechnik und Mathematik auf eine moderne, interaktive Art!*

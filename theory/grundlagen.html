@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grundlagen - Theorie - SIU-EM-Wizard</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/theory.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="theory-header">
+        <nav class="theory-nav">
+            <div class="nav-left">
+                <a href="../index.html" class="btn btn-secondary">← Zurück zur Übersicht</a>
+            </div>
+            <div class="nav-center">
+                <h1>Grundlagen der Elektrotechnik & Mathematik</h1>
+            </div>
+            <div class="nav-right">
+                <a href="../exercises/grundlagen/grundrechenarten.html" class="btn btn-primary">Jetzt üben</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Table of Contents -->
+    <nav class="theory-toc">
+        <div class="container">
+            <h2>Inhaltsverzeichnis</h2>
+            <ul class="toc-list">
+                <li><a href="#mathematik-grundlagen">1. Mathematische Grundlagen</a></li>
+                <li><a href="#grundrechenarten">2. Grundrechenarten</a></li>
+                <li><a href="#brueche">3. Bruchrechnung</a></li>
+                <li><a href="#potenzen">4. Potenzen und Wurzeln</a></li>
+                <li><a href="#gleichungen">5. Lineare Gleichungen</a></li>
+                <li><a href="#elektrotechnik-grundlagen">6. Grundlagen der Elektrotechnik</a></li>
+                <li><a href="#ohmsches-gesetz">7. Ohmsches Gesetz</a></li>
+                <li><a href="#leistung-arbeit">8. Leistung und Arbeit</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="theory-container">
+        <!-- Mathematical Foundations -->
+        <section id="mathematik-grundlagen" class="theory-section">
+            <div class="container">
+                <h2>1. Mathematische Grundlagen</h2>
+                
+                <div class="content-block">
+                    <h3>Zahlenbereiche</h3>
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <h4>Natürliche Zahlen (ℕ)</h4>
+                            <p>$\mathbb{N} = \{1, 2, 3, 4, 5, ...\}$</p>
+                            <p>Zum Zählen und Ordnen</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>Ganze Zahlen (ℤ)</h4>
+                            <p>$\mathbb{Z} = \{..., -2, -1, 0, 1, 2, ...\}$</p>
+                            <p>Positive und negative Zahlen</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>Rationale Zahlen (ℚ)</h4>
+                            <p>$\mathbb{Q} = \left\{\frac{a}{b} \mid a, b \in \mathbb{Z}, b \neq 0\right\}$</p>
+                            <p>Brüche und endliche Dezimalzahlen</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>Reelle Zahlen (ℝ)</h4>
+                            <p>Alle Zahlen auf der Zahlengeraden</p>
+                            <p>Inklusive irrationale Zahlen wie $\pi$ und $\sqrt{2}$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Rechenregeln und Prioritäten</h3>
+                    <div class="formula-box">
+                        <h4>Reihenfolge der Operationen</h4>
+                        <ol class="priority-list">
+                            <li><strong>Klammern</strong> zuerst: $(...)$</li>
+                            <li><strong>Potenzen</strong>: $a^n$</li>
+                            <li><strong>Punktrechnung</strong>: $\times, \div$</li>
+                            <li><strong>Strichrechnung</strong>: $+, -$</li>
+                        </ol>
+                        <div class="example">
+                            <p><strong>Beispiel:</strong></p>
+                            <p>$3 + 4 \times 2^2 = 3 + 4 \times 4 = 3 + 16 = 19$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Arithmetic Operations -->
+        <section id="grundrechenarten" class="theory-section">
+            <div class="container">
+                <h2>2. Grundrechenarten</h2>
+                
+                <div class="operation-grid">
+                    <div class="operation-card">
+                        <h3>Addition (+)</h3>
+                        <div class="operation-content">
+                            <p><strong>Definition:</strong> Zusammenzählen von Zahlen</p>
+                            <div class="formula">$a + b = c$</div>
+                            
+                            <h4>Eigenschaften:</h4>
+                            <ul>
+                                <li><strong>Kommutativ:</strong> $a + b = b + a$</li>
+                                <li><strong>Assoziativ:</strong> $(a + b) + c = a + (b + c)$</li>
+                                <li><strong>Neutrales Element:</strong> $a + 0 = a$</li>
+                            </ul>
+                            
+                            <div class="example-box">
+                                <h5>Beispiele:</h5>
+                                <p>$15 + 23 = 38$</p>
+                                <p>$(-5) + 8 = 3$</p>
+                                <p>$7.5 + 2.3 = 9.8$</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="operation-card">
+                        <h3>Subtraktion (−)</h3>
+                        <div class="operation-content">
+                            <p><strong>Definition:</strong> Abziehen einer Zahl von einer anderen</p>
+                            <div class="formula">$a - b = c$</div>
+                            
+                            <h4>Eigenschaften:</h4>
+                            <ul>
+                                <li><strong>Nicht kommutativ:</strong> $a - b \neq b - a$</li>
+                                <li><strong>Addition des Inversen:</strong> $a - b = a + (-b)$</li>
+                            </ul>
+                            
+                            <div class="example-box">
+                                <h5>Beispiele:</h5>
+                                <p>$25 - 17 = 8$</p>
+                                <p>$10 - 15 = -5$</p>
+                                <p>$8.7 - 3.2 = 5.5$</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="operation-card">
+                        <h3>Multiplikation (×)</h3>
+                        <div class="operation-content">
+                            <p><strong>Definition:</strong> Wiederholte Addition</p>
+                            <div class="formula">$a \times b = c$ oder $a \cdot b = c$</div>
+                            
+                            <h4>Eigenschaften:</h4>
+                            <ul>
+                                <li><strong>Kommutativ:</strong> $a \times b = b \times a$</li>
+                                <li><strong>Assoziativ:</strong> $(a \times b) \times c = a \times (b \times c)$</li>
+                                <li><strong>Distributiv:</strong> $a \times (b + c) = a \times b + a \times c$</li>
+                            </ul>
+                            
+                            <div class="example-box">
+                                <h5>Beispiele:</h5>
+                                <p>$6 \times 7 = 42$</p>
+                                <p>$(-3) \times 4 = -12$</p>
+                                <p>$2.5 \times 6 = 15$</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="operation-card">
+                        <h3>Division (÷)</h3>
+                        <div class="operation-content">
+                            <p><strong>Definition:</strong> Aufteilen in gleiche Teile</p>
+                            <div class="formula">$a \div b = c$ oder $\frac{a}{b} = c$</div>
+                            
+                            <h4>Eigenschaften:</h4>
+                            <ul>
+                                <li><strong>Nicht kommutativ:</strong> $a \div b \neq b \div a$</li>
+                                <li><strong>Division durch Null:</strong> Undefiniert!</li>
+                                <li><strong>Multiplikation mit Kehrwert:</strong> $a \div b = a \times \frac{1}{b}$</li>
+                            </ul>
+                            
+                            <div class="example-box">
+                                <h5>Beispiele:</h5>
+                                <p>$24 \div 6 = 4$</p>
+                                <p>$15 \div 3 = 5$</p>
+                                <p>$10 \div 4 = 2.5$</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fractions -->
+        <section id="brueche" class="theory-section">
+            <div class="container">
+                <h2>3. Bruchrechnung</h2>
+                
+                <div class="content-block">
+                    <h3>Grundlagen</h3>
+                    <div class="formula-box">
+                        <p>Ein Bruch besteht aus <strong>Zähler</strong> und <strong>Nenner</strong>:</p>
+                        <div class="formula-large">$$\frac{\text{Zähler}}{\text{Nenner}} = \frac{a}{b} \quad (b \neq 0)$$</div>
+                        <p>Der Bruch $\frac{a}{b}$ bedeutet: "a Teile von insgesamt b gleichen Teilen"</p>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Bruchtypen</h3>
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <h4>Echter Bruch</h4>
+                            <p>Zähler < Nenner</p>
+                            <p>$\frac{3}{5}, \frac{7}{10}, \frac{1}{4}$</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>Unechter Bruch</h4>
+                            <p>Zähler ≥ Nenner</p>
+                            <p>$\frac{7}{3}, \frac{5}{5}, \frac{9}{4}$</p>
+                        </div>
+                        <div class="info-card">
+                            <h4>Gemischte Zahl</h4>
+                            <p>Ganzer Teil + echter Bruch</p>
+                            <p>$2\frac{1}{3}, 1\frac{3}{4}, 3\frac{2}{5}$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Bruchrechenregeln</h3>
+                    
+                    <div class="rule-card">
+                        <h4>Erweitern und Kürzen</h4>
+                        <p><strong>Erweitern:</strong> Zähler und Nenner mit derselben Zahl multiplizieren</p>
+                        <div class="formula">$$\frac{a}{b} = \frac{a \times k}{b \times k} \quad (k \neq 0)$$</div>
+                        
+                        <p><strong>Kürzen:</strong> Zähler und Nenner durch dieselbe Zahl teilen</p>
+                        <div class="formula">$$\frac{a \times k}{b \times k} = \frac{a}{b} \quad (k \neq 0)$$</div>
+                        
+                        <div class="example">
+                            <p><strong>Beispiel:</strong> $\frac{6}{9} = \frac{6 \div 3}{9 \div 3} = \frac{2}{3}$</p>
+                        </div>
+                    </div>
+
+                    <div class="rule-card">
+                        <h4>Addition und Subtraktion</h4>
+                        <p><strong>Gleiche Nenner:</strong></p>
+                        <div class="formula">$$\frac{a}{c} \pm \frac{b}{c} = \frac{a \pm b}{c}$$</div>
+                        
+                        <p><strong>Verschiedene Nenner:</strong> Auf gemeinsamen Nenner erweitern</p>
+                        <div class="formula">$$\frac{a}{b} + \frac{c}{d} = \frac{a \times d + c \times b}{b \times d}$$</div>
+                        
+                        <div class="example">
+                            <p><strong>Beispiel:</strong> $\frac{1}{3} + \frac{1}{4} = \frac{4}{12} + \frac{3}{12} = \frac{7}{12}$</p>
+                        </div>
+                    </div>
+
+                    <div class="rule-card">
+                        <h4>Multiplikation</h4>
+                        <div class="formula">$$\frac{a}{b} \times \frac{c}{d} = \frac{a \times c}{b \times d}$$</div>
+                        
+                        <div class="example">
+                            <p><strong>Beispiel:</strong> $\frac{2}{3} \times \frac{4}{5} = \frac{8}{15}$</p>
+                        </div>
+                    </div>
+
+                    <div class="rule-card">
+                        <h4>Division</h4>
+                        <p>Multipliziere mit dem Kehrwert:</p>
+                        <div class="formula">$$\frac{a}{b} \div \frac{c}{d} = \frac{a}{b} \times \frac{d}{c} = \frac{a \times d}{b \times c}$$</div>
+                        
+                        <div class="example">
+                            <p><strong>Beispiel:</strong> $\frac{3}{4} \div \frac{2}{5} = \frac{3}{4} \times \frac{5}{2} = \frac{15}{8}$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Powers and Roots -->
+        <section id="potenzen" class="theory-section">
+            <div class="container">
+                <h2>4. Potenzen und Wurzeln</h2>
+                
+                <div class="content-block">
+                    <h3>Potenzen</h3>
+                    <div class="formula-box">
+                        <div class="formula-large">$$a^n = \underbrace{a \times a \times ... \times a}_{n \text{ mal}}$$</div>
+                        <p>$a$ = Basis, $n$ = Exponent</p>
+                    </div>
+                    
+                    <div class="rule-grid">
+                        <div class="rule-card">
+                            <h4>Potenzgesetze</h4>
+                            <ul class="formula-list">
+                                <li>$a^m \times a^n = a^{m+n}$</li>
+                                <li>$a^m \div a^n = a^{m-n}$</li>
+                                <li>$(a^m)^n = a^{m \times n}$</li>
+                                <li>$(a \times b)^n = a^n \times b^n$</li>
+                                <li>$a^0 = 1$ (für $a \neq 0$)</li>
+                                <li>$a^{-n} = \frac{1}{a^n}$</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="rule-card">
+                            <h4>Beispiele</h4>
+                            <ul class="example-list">
+                                <li>$2^3 = 8$</li>
+                                <li>$3^4 = 81$</li>
+                                <li>$5^2 \times 5^3 = 5^5 = 3125$</li>
+                                <li>$10^{-2} = \frac{1}{100} = 0.01$</li>
+                                <li>$(2^3)^2 = 2^6 = 64$</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Wurzeln</h3>
+                    <div class="formula-box">
+                        <p>Die $n$-te Wurzel ist die Umkehrung der $n$-ten Potenz:</p>
+                        <div class="formula-large">$$\sqrt[n]{a} = b \Leftrightarrow b^n = a$$</div>
+                        <p>Spezialfall: $\sqrt{a} = \sqrt[2]{a}$ (Quadratwurzel)</p>
+                    </div>
+                    
+                    <div class="rule-grid">
+                        <div class="rule-card">
+                            <h4>Wurzelgesetze</h4>
+                            <ul class="formula-list">
+                                <li>$\sqrt[n]{a \times b} = \sqrt[n]{a} \times \sqrt[n]{b}$</li>
+                                <li>$\sqrt[n]{\frac{a}{b}} = \frac{\sqrt[n]{a}}{\sqrt[n]{b}}$</li>
+                                <li>$\sqrt[n]{\sqrt[m]{a}} = \sqrt[n \times m]{a}$</li>
+                                <li>$\sqrt[n]{a^m} = a^{\frac{m}{n}}$</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="rule-card">
+                            <h4>Beispiele</h4>
+                            <ul class="example-list">
+                                <li>$\sqrt{16} = 4$</li>
+                                <li>$\sqrt[3]{27} = 3$</li>
+                                <li>$\sqrt{9 \times 16} = \sqrt{9} \times \sqrt{16} = 3 \times 4 = 12$</li>
+                                <li>$\sqrt{50} = \sqrt{25 \times 2} = 5\sqrt{2}$</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Linear Equations -->
+        <section id="gleichungen" class="theory-section">
+            <div class="container">
+                <h2>5. Lineare Gleichungen</h2>
+                
+                <div class="content-block">
+                    <h3>Definition</h3>
+                    <div class="formula-box">
+                        <p>Eine lineare Gleichung mit einer Unbekannten hat die Form:</p>
+                        <div class="formula-large">$$ax + b = c$$</div>
+                        <p>Wobei $a \neq 0$, und $x$ die gesuchte Variable ist.</p>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Lösungsverfahren</h3>
+                    <div class="method-card">
+                        <h4>Äquivalenzumformungen</h4>
+                        <p>Beide Seiten der Gleichung dürfen mit denselben Operationen verändert werden:</p>
+                        <ul class="rule-list">
+                            <li>Addition/Subtraktion derselben Zahl</li>
+                            <li>Multiplikation/Division mit derselben Zahl (≠ 0)</li>
+                        </ul>
+                    </div>
+
+                    <div class="method-card">
+                        <h4>Standardvorgehen</h4>
+                        <ol class="step-list">
+                            <li>Klammern auflösen</li>
+                            <li>Terme mit $x$ auf eine Seite sammeln</li>
+                            <li>Konstante Terme auf die andere Seite bringen</li>
+                            <li>Durch den Koeffizienten von $x$ teilen</li>
+                            <li>Probe durchführen</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="example-block">
+                    <h3>Beispiel</h3>
+                    <div class="step-by-step">
+                        <div class="step">
+                            <span class="step-number">1</span>
+                            <div class="step-content">
+                                <p><strong>Gleichung:</strong> $3x + 7 = 22$</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <div class="step-content">
+                                <p><strong>Subtrahiere 7:</strong> $3x = 22 - 7 = 15$</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <div class="step-content">
+                                <p><strong>Teile durch 3:</strong> $x = \frac{15}{3} = 5$</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">4</span>
+                            <div class="step-content">
+                                <p><strong>Probe:</strong> $3 \times 5 + 7 = 15 + 7 = 22$ ✓</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Electrical Engineering Basics -->
+        <section id="elektrotechnik-grundlagen" class="theory-section">
+            <div class="container">
+                <h2>6. Grundlagen der Elektrotechnik</h2>
+                
+                <div class="content-block">
+                    <h3>Grundbegriffe</h3>
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h4>Ladung (Q)</h4>
+                            <p><strong>Einheit:</strong> Coulomb [C]</p>
+                            <p><strong>Definition:</strong> Grundeigenschaft der Materie</p>
+                            <p>Elementarladung: $e = 1.602 \times 10^{-19}$ C</p>
+                        </div>
+                        
+                        <div class="concept-card">
+                            <h4>Strom (I)</h4>
+                            <p><strong>Einheit:</strong> Ampere [A]</p>
+                            <p><strong>Definition:</strong> Bewegte Ladung pro Zeit</p>
+                            <div class="formula">$$I = \frac{Q}{t}$$</div>
+                        </div>
+                        
+                        <div class="concept-card">
+                            <h4>Spannung (U)</h4>
+                            <p><strong>Einheit:</strong> Volt [V]</p>
+                            <p><strong>Definition:</strong> Potentialdifferenz zwischen zwei Punkten</p>
+                            <p>Treibt den Strom an</p>
+                        </div>
+                        
+                        <div class="concept-card">
+                            <h4>Widerstand (R)</h4>
+                            <p><strong>Einheit:</strong> Ohm [Ω]</p>
+                            <p><strong>Definition:</strong> Hemmt den Stromfluss</p>
+                            <p>Materialabhängig</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Spezifischer Widerstand</h3>
+                    <div class="formula-box">
+                        <p>Der Widerstand eines Leiters hängt ab von:</p>
+                        <div class="formula-large">$$R = \rho \cdot \frac{l}{A}$$</div>
+                        <ul class="parameter-list">
+                            <p>$\rho$ = spezifischer Widerstand [Ω·mm²/m]</p>
+                            <p>$l$ = Länge des Leiters [m]</p>
+                            <p>$A$ = Querschnittsfläche [mm²]</p>
+                        </ul>
+                        
+                        <div class="theory-tips" style="margin-top: var(--spacing-md);">
+                            <h4>⚠️ Wichtiger Hinweis - Leiter vs. Leitung:</h4>
+                            <ul>
+                                <p><strong>Leiter:</strong> Normale Berechnung mit $R = \rho \cdot \frac{l}{A}$</p>
+                                <p><strong>Leitung:</strong> Faktor 2 nicht vergessen! $R = 2 \cdot \rho \cdot \frac{l}{A}$</p>
+                                <p><strong>Grund:</strong> Bei einer Leitung fließt der Strom hin UND zurück (2 Leiter)</p>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="material-table">
+                        <h4>Spezifische Widerstände (bei 20°C)</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Material</th>
+                                    <th>ρ [Ω·mm²/m]</th>
+                                    <th>Anwendung</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Silber</td>
+                                    <td>0.017</td>
+                                    <td>Kontakte</td>
+                                </tr>
+                                <tr>
+                                    <td>Kupfer</td>
+                                    <td>0.0175</td>
+                                    <td>Kabel</td>
+                                </tr>
+                                <tr>
+                                    <td>Aluminium</td>
+                                    <td>0.03</td>
+                                    <td>Freileitungen</td>
+                                </tr>
+                                <tr>
+                                    <td>Eisen</td>
+                                    <td>0.10</td>
+                                    <td>Konstruktion</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ohm's Law -->
+        <section id="ohmsches-gesetz" class="theory-section">
+            <div class="container">
+                <h2>7. Ohmsches Gesetz</h2>
+                
+                <div class="content-block">
+                    <h3>Das fundamentale Gesetz der Elektrotechnik</h3>
+                    <div class="formula-box highlight">
+                        <div class="formula-large">$$U = R \times I$$</div>
+                        <p class="formula-description">
+                            Die Spannung ist gleich dem Produkt aus Strom und Widerstand
+                        </p>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Varianten des Ohmschen Gesetzes</h3>
+                    <div class="formula-triangle">
+                        <div class="triangle-container">
+                            <div class="triangle">
+                                <div class="triangle-top">U</div>
+                                <div class="triangle-bottom">
+                                    <span>R</span>
+                                    <span>I</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="formula-variants">
+                            <div class="variant">
+                                <h4>Spannung berechnen</h4>
+                                <div class="formula">$$U = R \times I$$</div>
+                            </div>
+                            <div class="variant">
+                                <h4>Strom berechnen</h4>
+                                <div class="formula">$$I = \frac{U}{R}$$</div>
+                            </div>
+                            <div class="variant">
+                                <h4>Widerstand berechnen</h4>
+                                <div class="formula">$$R = \frac{U}{I}$$</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-block">
+                    <h3>Anwendungsbeispiele</h3>
+                    <div class="example-grid">
+                        <div class="example-card">
+                            <h4>Beispiel 1: Spannung berechnen</h4>
+                            <p><strong>Gegeben:</strong> $I = 2$ A, $R = 10$ Ω</p>
+                            <p><strong>Gesucht:</strong> $U$</p>
+                            <p><strong>Lösung:</strong> $U = I \times R = 2 \text{ A} \times 10 \text{ Ω} = 20 \text{ V}$</p>
+                        </div>
+                        
+                        <div class="example-card">
+                            <h4>Beispiel 2: Strom berechnen</h4>
+                            <p><strong>Gegeben:</strong> $U = 12$ V, $R = 4$ Ω</p>
+                            <p><strong>Gesucht:</strong> $I$</p>
+                            <p><strong>Lösung:</strong> $I = \frac{U}{R} = \frac{12 \text{ V}}{4 \text{ Ω}} = 3 \text{ A}$</p>
+                        </div>
+                        
+                        <div class="example-card">
+                            <h4>Beispiel 3: Widerstand berechnen</h4>
+                            <p><strong>Gegeben:</strong> $U = 9$ V, $I = 0.5$ A</p>
+                            <p><strong>Gesucht:</strong> $R$</p>
+                            <p><strong>Lösung:</strong> $R = \frac{U}{I} = \frac{9 \text{ V}}{0.5 \text{ A}} = 18 \text{ Ω}$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Power and Work -->
+        <section id="leistung-arbeit" class="theory-section">
+            <div class="container">
+                <h2>8. Leistung und Arbeit</h2>
+                
+                <div class="content-block">
+                    <h3>Elektrische Leistung</h3>
+                    <div class="formula-box">
+                        <p>Die elektrische Leistung ist das Produkt aus Spannung und Strom:</p>
+                        <div class="formula-large">$$P = U \times I$$</div>
+                        <p><strong>Einheit:</strong> Watt [W] = [V] × [A]</p>
+                    </div>
+                    
+                    <div class="formula-variants-grid">
+                        <div class="variant-card">
+                            <h4>Mit Ohmschen Gesetz</h4>
+                            <div class="formula">$$P = U \times I = U \times \frac{U}{R} = \frac{U^2}{R}$$</div>
+                        </div>
+                        <div class="variant-card">
+                            <h4>Alternative Form</h4>
+                            <div class="formula">$$P = U \times I = \frac{U}{R} \times R \times I = I^2 \times R$$</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Elektrische Arbeit</h3>
+                    <div class="formula-box">
+                        <p>Die elektrische Arbeit ist Leistung multipliziert mit Zeit:</p>
+                        <div class="formula-large">$$W = P \times t$$</div>
+                        <p><strong>Einheit:</strong> Wattsekunde [Ws] oder Kilowattstunde [kWh]</p>
+                        <p><strong>Umrechnung:</strong> 1 kWh = 3.6 × 10⁶ Ws = 3.6 MWs</p>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3>Wirkungsgrad</h3>
+                    <div class="formula-box">
+                        <p>Der Wirkungsgrad beschreibt das Verhältnis von Nutzleistung zu aufgenommener Leistung:</p>
+                        <div class="formula-large">$$\eta = \frac{P_{\text{ab}}}{P_{\text{auf}}} = \frac{P_{\text{Nutz}}}{P_{\text{ges}}}$$</div>
+                        <p>Angabe als Dezimalzahl (0 ≤ η ≤ 1) oder in Prozent (0% ≤ η ≤ 100%)</p>
+                    </div>
+                    
+                    <div class="efficiency-examples">
+                        <h4>Typische Wirkungsgrade</h4>
+                        <div class="efficiency-grid">
+                            <div class="efficiency-item">
+                                <span class="device">Glühlampe</span>
+                                <span class="efficiency">5%</span>
+                            </div>
+                            <div class="efficiency-item">
+                                <span class="device">Verbrennungsmotor</span>
+                                <span class="efficiency">25-35%</span>
+                            </div>
+                            <div class="efficiency-item">
+                                <span class="device">LED-Lampe</span>
+                                <span class="efficiency">80-90%</span>
+                            </div>
+                            <div class="efficiency-item">
+                                <span class="device">Elektromotor</span>
+                                <span class="efficiency">90-95%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Gesamtwirkungsgrad</h3>
+                    <div class="formula-box">
+                        <p>Der Wirkungsgrad beschreibt den Wirkungsgrad einer kompletten Anlage (mehrere Einzelwirkungsgrade):</p>
+                        <div class="formula-large">$$\eta_{total} = \eta_1 \times ... \times \eta_n$$</div>
+                        <p><strong>n:</strong> anzahl Einzelwirkungsgrade</p>
+                        <p>Gesamtwirkungsgrad sicher ≥ als der kleinste Einzelwirkungsgrad!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Navigation -->
+    <footer class="theory-footer">
+        <div class="container">
+            <div class="footer-nav">
+                <a href="../index.html" class="btn btn-secondary">← Zurück zur Hauptseite</a>
+                <a href="../exercises/grundlagen/grundrechenarten.html" class="btn btn-primary">Jetzt üben</a>
+                <a href="widerstandsschaltungen.html" class="btn btn-secondary">Nächstes Kapitel →</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Highlight current section in TOC
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('.theory-section');
+            const tocLinks = document.querySelectorAll('.toc-list a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                if (sectionTop <= 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Track page visit
+        if (window.parent && window.parent.emWizard) {
+            window.parent.emWizard.progressTracker.updateLastTopic(window.location.href);
+        }
+    </script>
+</body>
+</html>

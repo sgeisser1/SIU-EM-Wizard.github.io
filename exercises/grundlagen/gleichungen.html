@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lineare Gleichungen - SIU-EM-Wizard</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/exercise.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="exercise-header">
+        <nav class="exercise-nav">
+            <div class="nav-left">
+                <a href="../../index.html" class="btn btn-secondary">← Zurück zur Übersicht</a>
+            </div>
+            <div class="nav-center">
+                <h1>Lineare Gleichungen</h1>
+            </div>
+            <div class="nav-right">
+                <div class="difficulty-selector">
+                    <select id="difficulty" onchange="changeDifficulty()">
+                        <option value="easy">Einfach</option>
+                        <option value="medium" selected>Mittel</option>
+                        <option value="hard">Schwer</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="exercise-container">
+        <!-- Progress Bar -->
+        <div class="exercise-progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+            <span class="progress-text">Aufgabe <span id="currentQuestion">1</span> von <span id="totalQuestions">10</span></span>
+        </div>
+
+        <!-- Theory Section (Collapsible) -->
+        <section class="theory-section" id="theorySection">
+            <div class="theory-header" onclick="toggleTheory()">
+                <h2>📚 Theorie: Lineare Gleichungen</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="theory-content" id="theoryContent">
+                <div class="theory-grid">
+                    <div class="theory-card">
+                        <h3>Allgemeine Form</h3>
+                        <p>$$ax + b = c$$</p>
+                        <p>Wobei $a \neq 0$ und $x$ die gesuchte Variable ist.</p>
+                    </div>
+                    <div class="theory-card">
+                        <h3>Äquivalenzumformungen</h3>
+                        <p>Beide Seiten der Gleichung dürfen:</p>
+                        <ul>
+                            <li>Mit derselben Zahl addiert/subtrahiert werden</li>
+                            <li>Mit derselben Zahl (≠ 0) multipliziert/dividiert werden</li>
+                        </ul>
+                    </div>
+                    <div class="theory-card">
+                        <h3>Lösungsschema</h3>
+                        <ol>
+                            <li>Klammern auflösen</li>
+                            <li>x-Terme auf eine Seite sammeln</li>
+                            <li>Konstante auf die andere Seite</li>
+                            <li>Durch Koeffizienten von x teilen</li>
+                            <li>Probe durchführen</li>
+                        </ol>
+                    </div>
+                    <div class="theory-card">
+                        <h3>Beispiel</h3>
+                        <p>$3x + 7 = 22$</p>
+                        <p>$3x = 22 - 7 = 15$</p>
+                        <p>$x = \frac{15}{3} = 5$</p>
+                        <p><strong>Probe:</strong> $3 \cdot 5 + 7 = 22$ ✓</p>
+                    </div>
+                </div>
+                <div class="theory-tips">
+                    <h4>💡 Wichtige Tipps:</h4>
+                    <ul>
+                        <li><strong>Immer systematisch vorgehen</strong></li>
+                        <li><strong>Jeder Schritt muss für beide Seiten gelten</strong></li>
+                        <li><strong>Probe am Ende nicht vergessen</strong></li>
+                        <li><strong>Bei Brüchen: Hauptnenner finden</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Exercise Section -->
+        <section class="exercise-section">
+            <div class="exercise-card" id="exerciseCard">
+                <div class="exercise-question">
+                    <h3 id="questionText">Lösen Sie die Gleichung nach x:</h3>
+                    <div class="math-expression" id="mathExpression">
+                        $$3x + 7 = 22$$
+                    </div>
+                </div>
+
+                <div class="exercise-input">
+                    <label for="answer">x = </label>
+                    <input type="number" id="answer" step="any" placeholder="Lösung für x eingeben..." onkeypress="handleEnterKey(event)">
+                    <div class="input-buttons">
+                        <button class="btn btn-primary" onclick="checkAnswer()">Prüfen</button>
+                        <button class="btn btn-secondary" onclick="showHint()" id="hintBtn">💡 Hinweis</button>
+                        <button class="btn btn-secondary" onclick="showSteps()" id="stepsBtn">📖 Schritte</button>
+                    </div>
+                </div>
+
+                <div class="feedback" id="feedback"></div>
+                <div class="hint" id="hint"></div>
+                <div class="solution" id="solution"></div>
+                <div class="steps" id="steps"></div>
+            </div>
+
+            <div class="exercise-controls">
+                <button class="btn btn-secondary" onclick="previousQuestion()" id="prevBtn" disabled>← Vorherige</button>
+                <button class="btn btn-primary" onclick="generateNewQuestion()">Neue Aufgabe</button>
+                <button class="btn btn-secondary" onclick="nextQuestion()" id="nextBtn">Nächste →</button>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Richtige Antworten</h4>
+                    <span class="stat-number" id="correctAnswers">0</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Gesamte Aufgaben</h4>
+                    <span class="stat-number" id="totalAnswers">0</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Erfolgsquote</h4>
+                    <span class="stat-number" id="successRate">0%</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Schwierigkeitsgrad</h4>
+                    <span class="stat-number" id="currentDifficulty">Mittel</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Exercise Logic for Lineare Gleichungen
+        class LinearEquationExercise {
+            constructor() {
+                this.currentQuestion = 1;
+                this.totalQuestions = 10;
+                this.correctAnswers = 0;
+                this.totalAnswers = 0;
+                this.difficulty = 'medium';
+                this.currentExercise = null;
+                this.answered = false;
+                
+                this.generateNewQuestion();
+                this.updateStats();
+            }
+
+            generateNewQuestion() {
+                this.answered = false;
+                this.currentExercise = this.createLinearEquation(this.difficulty);
+                this.displayQuestion();
+                this.clearFeedback();
+                document.getElementById('answer').value = '';
+                document.getElementById('answer').focus();
+            }
+
+            createLinearEquation(difficulty) {
+                let a, b, x;
+                
+                switch (difficulty) {
+                    case 'easy':
+                        a = Math.floor(Math.random() * 9) + 1; // 1-9
+                        x = Math.floor(Math.random() * 10) + 1; // 1-10
+                        b = Math.floor(Math.random() * 21) - 10; // -10 to 10
+                        break;
+                    case 'medium':
+                        a = Math.floor(Math.random() * 14) + 2; // 2-15
+                        x = Math.floor(Math.random() * 41) - 20; // -20 to 20
+                        b = Math.floor(Math.random() * 101) - 50; // -50 to 50
+                        break;
+                    case 'hard':
+                        a = Math.floor(Math.random() * 19) + 2; // 2-20
+                        x = Math.floor(Math.random() * 61) - 30; // -30 to 30
+                        b = Math.floor(Math.random() * 201) - 100; // -100 to 100
+                        break;
+                }
+
+                // Generate equation: ax + b = c
+                const c = a * x + b;
+                const question = `${a}x ${b >= 0 ? '+' : ''} ${b} = ${c}`;
+                const answer = x;
+                const hint = `Isoliere x: ${b > 0 ? 'Subtrahiere ' + b : 'Addiere ' + Math.abs(b)}, dann teile durch ${a}`;
+                const solution = `x = \\frac{${c} - (${b})}{${a}} = \\frac{${c - b}}{${a}} = ${x}`;
+
+                return {
+                    type: 'linear_equation',
+                    difficulty,
+                    question,
+                    answer,
+                    hint,
+                    solution,
+                    steps: this.generateLinearEquationSteps(a, b, c, x)
+                };
+            }
+
+            generateLinearEquationSteps(a, b, c, x) {
+                const steps = [];
+                steps.push(`Gegeben: ${a}x ${b >= 0 ? '+' : ''} ${b} = ${c}`);
+                
+                if (b !== 0) {
+                    if (b > 0) {
+                        steps.push(`Subtrahiere ${b} von beiden Seiten: ${a}x = ${c} - ${b}`);
+                    } else {
+                        steps.push(`Addiere ${Math.abs(b)} zu beiden Seiten: ${a}x = ${c} + ${Math.abs(b)}`);
+                    }
+                    steps.push(`Vereinfache: ${a}x = ${c - b}`);
+                }
+                
+                steps.push(`Teile beide Seiten durch ${a}: x = \\frac{${c - b}}{${a}}`);
+                steps.push(`Lösung: x = ${x}`);
+                steps.push(`Probe: ${a} \\cdot ${x} ${b >= 0 ? '+' : ''} ${b} = ${a * x + b} = ${c} ✓`);
+                
+                return steps;
+            }
+
+            displayQuestion() {
+                document.getElementById('mathExpression').innerHTML = `$$${this.currentExercise.question}$$`;
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+
+            checkAnswer() {
+                if (this.answered) return;
+
+                const userAnswer = parseFloat(document.getElementById('answer').value);
+                const feedback = document.getElementById('feedback');
+                
+                if (isNaN(userAnswer)) {
+                    feedback.innerHTML = '<div class="feedback-error">⚠️ Bitte geben Sie eine gültige Zahl ein.</div>';
+                    return;
+                }
+
+                this.answered = true;
+                this.totalAnswers++;
+
+                if (Math.abs(userAnswer - this.currentExercise.answer) < 0.001) {
+                    this.correctAnswers++;
+                    feedback.innerHTML = `
+                        <div class="feedback-success">
+                            ✅ Richtig! x = ${this.currentExercise.answer}
+                            <br><small>Vergessen Sie nicht die Probe zu machen!</small>
+                        </div>
+                    `;
+                    
+                    // Auto-advance after correct answer
+                    setTimeout(() => {
+                        this.nextQuestion();
+                    }, 3000);
+                } else {
+                    feedback.innerHTML = `
+                        <div class="feedback-error">
+                            ❌ Falsch. Ihre Antwort: x = ${userAnswer}, Richtige Antwort: x = ${this.currentExercise.answer}
+                        </div>
+                    `;
+                    this.showSolution();
+                }
+
+                this.updateStats();
+                this.updateProgress();
+            }
+
+            showHint() {
+                const hint = document.getElementById('hint');
+                hint.innerHTML = `<div class="hint-content">💡 ${this.currentExercise.hint}</div>`;
+            }
+
+            showSolution() {
+                const solution = document.getElementById('solution');
+                solution.innerHTML = `
+                    <div class="solution-content">
+                        <h4>📖 Lösung:</h4>
+                        <p>$$${this.currentExercise.solution}$$</p>
+                    </div>
+                `;
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+
+            showSteps() {
+                const stepsDiv = document.getElementById('steps');
+                if (this.currentExercise.steps) {
+                    let stepsHtml = '<div class="solution-steps"><h4>📝 Lösungsschritte:</h4>';
+                    this.currentExercise.steps.forEach((step, index) => {
+                        stepsHtml += `
+                            <div class="solution-step">
+                                <div class="step-number">${index + 1}</div>
+                                <div class="step-content">${step}</div>
+                            </div>
+                        `;
+                    });
+                    stepsHtml += '</div>';
+                    stepsDiv.innerHTML = stepsHtml;
+                    
+                    if (window.MathJax) {
+                        MathJax.typesetPromise();
+                    }
+                }
+            }
+
+            nextQuestion() {
+                if (this.currentQuestion < this.totalQuestions) {
+                    this.currentQuestion++;
+                } else {
+                    this.currentQuestion = 1;
+                }
+                this.generateNewQuestion();
+                this.updateProgress();
+            }
+
+            previousQuestion() {
+                if (this.currentQuestion > 1) {
+                    this.currentQuestion--;
+                    this.generateNewQuestion();
+                    this.updateProgress();
+                }
+            }
+
+            updateProgress() {
+                const progress = (this.currentQuestion / this.totalQuestions) * 100;
+                document.getElementById('progressBar').style.width = `${progress}%`;
+                document.getElementById('currentQuestion').textContent = this.currentQuestion;
+                document.getElementById('totalQuestions').textContent = this.totalQuestions;
+                
+                // Update button states
+                document.getElementById('prevBtn').disabled = this.currentQuestion === 1;
+            }
+
+            updateStats() {
+                document.getElementById('correctAnswers').textContent = this.correctAnswers;
+                document.getElementById('totalAnswers').textContent = this.totalAnswers;
+                const successRate = this.totalAnswers > 0 ? Math.round((this.correctAnswers / this.totalAnswers) * 100) : 0;
+                document.getElementById('successRate').textContent = `${successRate}%`;
+                document.getElementById('currentDifficulty').textContent = this.getDifficultyText();
+            }
+
+            getDifficultyText() {
+                const difficultyMap = {
+                    'easy': 'Einfach',
+                    'medium': 'Mittel',
+                    'hard': 'Schwer'
+                };
+                return difficultyMap[this.difficulty] || 'Mittel';
+            }
+
+            changeDifficulty(newDifficulty) {
+                this.difficulty = newDifficulty;
+                this.generateNewQuestion();
+                this.updateStats();
+            }
+
+            clearFeedback() {
+                document.getElementById('feedback').innerHTML = '';
+                document.getElementById('hint').innerHTML = '';
+                document.getElementById('solution').innerHTML = '';
+                document.getElementById('steps').innerHTML = '';
+            }
+        }
+
+        // Global functions
+        let exercise;
+
+        function initializeExercise() {
+            exercise = new LinearEquationExercise();
+        }
+
+        function checkAnswer() {
+            if (exercise) exercise.checkAnswer();
+        }
+
+        function showHint() {
+            if (exercise) exercise.showHint();
+        }
+
+        function showSteps() {
+            if (exercise) exercise.showSteps();
+        }
+
+        function generateNewQuestion() {
+            if (exercise) exercise.generateNewQuestion();
+        }
+
+        function nextQuestion() {
+            if (exercise) exercise.nextQuestion();
+        }
+
+        function previousQuestion() {
+            if (exercise) exercise.previousQuestion();
+        }
+
+        function changeDifficulty() {
+            const difficulty = document.getElementById('difficulty').value;
+            if (exercise) exercise.changeDifficulty(difficulty);
+        }
+
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        }
+
+        function toggleTheory() {
+            const content = document.getElementById('theoryContent');
+            const icon = document.querySelector('.toggle-icon');
+            
+            if (content.style.display === 'none' || !content.style.display) {
+                content.style.display = 'block';
+                icon.textContent = '▲';
+            } else {
+                content.style.display = 'none';
+                icon.textContent = '▼';
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeExercise();
+            
+            // Track progress
+            if (window.parent && window.parent.emWizard) {
+                window.parent.emWizard.progressTracker.updateLastTopic(window.location.href);
+            }
+        });
+
+        // Track exercise completion
+        window.addEventListener('beforeunload', function() {
+            if (exercise && exercise.correctAnswers > 0) {
+                if (window.parent && window.parent.emWizard) {
+                    window.parent.emWizard.progressTracker.markExerciseCompleted('grundlagen', 'gleichungen');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
